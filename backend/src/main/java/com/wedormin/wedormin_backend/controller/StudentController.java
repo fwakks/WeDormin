@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
+// http://localhost:8080
+
 @RestController
 @RequestMapping("/student")
 public class StudentController {
