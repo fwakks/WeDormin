@@ -1,19 +1,18 @@
 package com.wedormin.wedormin_backend.model;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
 public class Student {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long ruid;
 
     private String name;
     private String email;
+    private Integer age;
+    private String gender;
     private String class_year;
     private String major;
     private String about_me;
@@ -28,12 +27,14 @@ public class Student {
     public Student() {
     }
 
-    public Student(Long ruid, String name, String email, String class_year, String major, String about_me, String likes,
+    public Student(Long ruid, String name, String email, int age, String gender, String class_year, String major, String about_me, String likes,
             String dislikes, String instagram_username, String linkedin_link, String housing_preference,
             Integer lottery_number, Integer seniority_points) {
         this.ruid = ruid;
         this.name = name;
         this.email = email;
+        this.age = age;
+        this.gender = gender;
         this.class_year = class_year;
         this.major = major;
         this.about_me = about_me;
@@ -68,6 +69,22 @@ public class Student {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public String getClass_year() {
