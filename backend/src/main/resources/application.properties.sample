@@ -1,7 +1,8 @@
 spring.application.name=backend
-spring.datasource.url=jdbc:postgresql://localhost:5432/backend
-spring.datasource.username=your_username
-spring.datasource.password=your_password
-spring.jpa.hibernate.ddl-auto=update # or create, validate, none
-spring.jpa.show-sql=true # For debugging
+spring.datasource.url=jdbc:postgresql://aws-0-us-west-1.pooler.supabase.com:5432/postgres
+spring.datasource.username=postgres.gsnzwlhdnrvfukojfnjd
+spring.datasource.password=FrankDorm123!
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+spring.datasource.driver-class-name=org.postgresql.Driver
