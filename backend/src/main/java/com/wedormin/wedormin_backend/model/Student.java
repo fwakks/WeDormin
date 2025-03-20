@@ -1,11 +1,14 @@
 package com.wedormin.wedormin_backend.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
+@Table(name = "student")
 public class Student {
 
     @Id
@@ -24,6 +27,8 @@ public class Student {
     private String housing_preference;
     private Integer lottery_number;
     private Integer seniority_points;
+    @Column(columnDefinition = "vector(1536)")
+    private String embedding;
     
     public Student() {
     }
@@ -44,6 +49,7 @@ public class Student {
         this.housing_preference = housing_preference;
         this.lottery_number = lottery_number;
         this.seniority_points = seniority_points;
+        this.embedding = null;
     }
 
     public Long getRuid() {
@@ -149,5 +155,14 @@ public class Student {
     public void setSeniority_points(Integer seniority_points) {
         this.seniority_points = seniority_points;
     }
+
+    public String getEmbeddings(){
+        return embedding;
+    }
+
+    public void setEmbeddings(String embedding){
+        this.embedding = embedding;
+    }
+    
     
 }
