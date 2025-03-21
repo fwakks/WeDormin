@@ -1,39 +1,39 @@
 package com.wedormin.wedormin_backend.controller;
 
-import java.util.List;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.wedormin.wedormin_backend.model.Student;
 import com.wedormin.wedormin_backend.repository.StudentRepository;
+import com.wedormin.wedormin_backend.service.EmbeddingService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-// http://localhost:8080
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/students")
 public class StudentController {
-
     private final StudentRepository studentRepository;
+    private final EmbeddingService embeddingService;
 
-    public StudentController(StudentRepository studentRepository) {
+    public StudentController(StudentRepository studentRepository, EmbeddingService embeddingService) {
         this.studentRepository = studentRepository;
+        this.embeddingService = embeddingService;
     }
 
-    // Get all students
     @GetMapping
     public ResponseEntity<List<Student>> getStudents() {
-        return ResponseEntity.ok(studentRepository.findAll());
+        List<Student> students = studentRepository.findAll();
+        return ResponseEntity.ok(students);
     }
 
-    // Get student by RUID
+    @PostMapping
+    public ResponseEntity<Student> createStudent(@RequestBody Student student) {
+        Student savedStudent = studentRepository.save(student); 
+        savedStudent.setEmbedding(embeddingService.generateVector(savedStudent));
+        savedStudent = studentRepository.findById(savedStudent.getRuid()).orElse(savedStudent); 
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedStudent);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Student> getStudentById(@PathVariable Long id) {
         return studentRepository.findById(id)
@@ -41,14 +41,6 @@ public class StudentController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // Create a new student
-    @PostMapping
-    public ResponseEntity<Student> createStudent(@RequestBody Student student) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(studentRepository.save(student));
-    }
-
-    // Delete a student
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteStudent(@PathVariable Long id) {
         return studentRepository.findById(id)
@@ -58,7 +50,20 @@ public class StudentController {
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/{id}/similar/{limit}")
+    public ResponseEntity<List<Student>> getSimilarStudents(@PathVariable Long id, @PathVariable int limit) {
+        float[] vector = studentRepository.findById(id)
+                .map(Student::getEmbedding)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+        return ResponseEntity.ok(studentRepository.findSimilarStudents(vector, limit));
+    }
+
+    @GetMapping("/{id}/vector")
+    public ResponseEntity<String> getStudentVector(@PathVariable Long id) {
+        float[] vector = studentRepository.findById(id)
+                .map(Student::getEmbedding)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+        return ResponseEntity.ok(Arrays.toString(vector));
+    }
 }
-
-
-// TODO filter by class year, major, housing pref,
