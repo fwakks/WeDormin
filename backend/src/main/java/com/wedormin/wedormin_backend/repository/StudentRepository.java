@@ -18,7 +18,21 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     """, nativeQuery = true)
     List<Student> findSimilarStudents(@Param("vector") float[] vector, @Param("limit") int limit);
 
+    List<Student> findByNameContainingIgnoreCase(@Param("name")String name);
 
-    
+    @Query("""
+    SELECT s FROM Student s 
+    WHERE (:name IS NULL OR LOWER(s.name) LIKE LOWER(CONCAT('%', :name, '%')))
+    AND (:ruid IS NULL OR s.ruid = :ruid)
+    AND (:age IS NULL OR s.age = :age)
+    AND (:class_year IS NULL OR s.class_year = :class_year)
+    AND (:gender IS NULL OR s.gender = :gender)
+    """)
+List<Student> filterStudents(@Param("name") String name, 
+                             @Param("ruid") Long ruid,
+                             @Param("age") Integer age,
+                             @Param("class_year") Integer class_year,
+                             @Param("gender") String gender);
+
 
 }
