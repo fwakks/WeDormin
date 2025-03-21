@@ -72,4 +72,24 @@ public class StudentController {
                 .orElseThrow(() -> new RuntimeException("Student not found"));
         return ResponseEntity.ok(Arrays.toString(vector));
     }
+
+    // Get students by age range, major, and gender
+    @GetMapping("/filter")
+    public ResponseEntity<List<Student>> compoundFilterStudents(
+        @RequestParam(required = false) Integer minAge,
+        @RequestParam(required = false) Integer maxAge,
+        @RequestParam(required = false) List<String> majors,
+        @RequestParam(required = false) String gender) {
+        
+        List<Student> students = studentRepository.filterStudentsAdvanced(minAge, maxAge, majors, gender);
+        return ResponseEntity.ok(students);
+    }
+
+    // Get students by name
+    @GetMapping("/search")
+    public ResponseEntity<List<Student>> searchByName(@RequestParam(required = false) String name) {
+        List<Student> students = studentRepository.searchByName(name);
+        return ResponseEntity.ok(students);
+    }
+
 }

@@ -4,7 +4,6 @@ import com.wedormin.wedormin_backend.repository.StudentRepository;
 import com.wedormin.wedormin_backend.service.EmbeddingService;
 
 import com.wedormin.wedormin_backend.model.Student;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
