@@ -14,3 +14,7 @@ All the endpoints will be located in the ```controller/``` directory.
 - Search by partial name: ```GET``` http://localhost:8080/api/students/search?name=John
 
 ## Housing
+
+- Get all housing: ```GET``` http://localhost:8080/api/housing/all
+- Get all on-campus housing: ```GET``` http://localhost:8080/api/housing/oncampus
+- Get all off-campus housing: ```GET``` http://localhost:8080/api/housing/offcampus
