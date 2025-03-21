@@ -1,0 +1,52 @@
+﻿housing_id,address,num_rooms,min_class_year,campus,avg_lottery_number,housing_type,availability
+1,"32 Bevier Rd, Piscataway, NJ 08854",1,Freshman,Busch,,Traditional,TRUE
+2,"50 Bevier Rd, Piscataway, NJ 08854",2,All,Busch,,Traditional,TRUE
+3,"42 Bevier Rd, Piscataway, NJ 08854",1,Freshman,Busch,,Traditional,TRUE
+4,"55 Bevier Rd, Piscataway, NJ 08854",4,Graduate,Busch,,Apartment,TRUE
+5,"Taylor Rd, Piscataway, NJ 08854",3,Sophomore,Busch,,Suite,TRUE
+6,"159 Davidson Rd, Piscataway, NJ 08854",2,Graduate,Busch,,Apartment,TRUE
+7,"103 Davidson Rd, Piscataway, NJ 08854",3,Sophomore,Busch,,Suite,TRUE
+8,"606 Marvin Ln, Piscataway, NJ 08854",2,Graduate,Busch,,Apartment,TRUE
+9,"36 Bevier Rd, Piscataway, NJ 08854",1,Freshman,Busch,,Traditional,TRUE
+10,,3,Sophomore,Busch,,Suite,TRUE
+11,"43 Bevier Rd, Piscataway, NJ 08854",1,Freshman,Busch,,Traditional,TRUE
+12,"111 Davidson Rd, Piscataway, NJ 08854",3,Sophomore,Busch,,Suite,TRUE
+13,"Davidson Rd, Piscataway, NJ 08854",2,Sophomore,Busch,,Apartment,TRUE
+14,"185 Bevier Rd, Piscataway, NJ 08854",2,Sophomore,Busch,,Apartment,TRUE
+15,"220 Marvin Ln, Piscataway, NJ 08854",2,Sophomore,Busch,,Apartment,TRUE
+16,"99 Davidson Rd, Piscataway, NJ 08854",3,Sophomore,Busch,,Suite,TRUE
+17,"97 Davidson Rd, Piscataway, NJ 08854",3,Sophomore,Busch,,Suite,TRUE
+18,"95 Joyce Kilmer Ave, Piscataway, NJ 08854",4,Sophomore,Livingston,,Apartment,TRUE
+19,"61 Joyce Kilmer Ave, Piscataway, NJ 08854",1,Sophomore,Livingston,,Traditional,TRUE
+20,"61 Joyce Kilmer Ave, Piscataway, NJ 08854",1,Sophomore,Livingston,,Traditional,TRUE
+21,"23 Avenue E, Piscataway, NJ 08854",1,Sophomore,Livingston,,Traditional,TRUE
+22,"23 Avenue E, Piscataway, NJ 08854",1,Sophomore,Livingston,,Traditional,TRUE
+23,"23 Avenue E, Piscataway, NJ 08854",1,Sophomore,Livingston,,Traditional,TRUE
+24,"11 Bishop Pl, New Brunswick, NJ 08901",1,Sophomore,College Avenue,,Traditional,TRUE
+25,"617 George St, New Brunswick, NJ 08901",1,Freshman,College Avenue,,Traditional,TRUE
+26,"590 George St, New Brunswick, NJ 08901",1,Sophomore,College Avenue,,Traditional,TRUE
+27,"125 College Ave, New Brunswick, NJ 08901",1,Freshman,College Avenue,,Traditional,TRUE
+28,"611 George St, New Brunswick, NJ 08901",1,Freshman,College Avenue,,Traditional,TRUE
+29,"615 George St, New Brunswick, NJ 08901",1,Sophomore,College Avenue,,Traditional,TRUE
+30,"600 George St, New Brunswick, NJ 08901",1,Sophomore,College Avenue,,Traditional,TRUE
+31,"5 Seminary Pl, New Brunswick, NJ 08901",1,Freshman,College Avenue,,Traditional,TRUE
+32,,1,Sophomore,College Avenue,,Traditional,TRUE
+33,,1,Freshman,College Avenue,,Traditional,TRUE
+34,,1,Sophomore,College Avenue,,Traditional,TRUE
+35,"40 College Ave, New Brunswick, NJ 08901",4,Sophomore,College Avenue,,Apartment,TRUE
+36,"135 College Ave, New Brunswick, NJ 08901",1,All,College Avenue,,Traditional,TRUE
+37,,1,Freshman,College Avenue,,Traditional,TRUE
+38,"30 Easton Ave, New Brunswick, NJ 08901",2,Sophomore,College Avenue,,Apartment,TRUE
+39,,1,Sophomore,College Avenue,,Traditional,TRUE
+40,"20 College Farm Rd, New Brunswick, NJ 08901",1,All,Cook/Douglass,,Traditional,TRUE
+41,"51 Labor Center Way, New Brunswick, NJ 08901",2,Sophomore,Cook/Douglass,,Apartment,TRUE
+42,"7 Suydam St, New Brunswick, NJ 08901",1,Sophomore,Cook/Douglass,,Traditional,TRUE
+43,"178 Ryders Ln, New Brunswick, NJ 08901",1,Freshman,Cook/Douglass,,Traditional,TRUE
+44,"33 Dudley Rd, New Brunswick, NJ 08901",1,Freshman,Cook/Douglass,,Traditional,TRUE
+45,"93 Gibbons Dr, New Brunswick, NJ 08901",1,All,Cook/Douglass,,Traditional,TRUE
+46,"45 Biel Rd, New Brunswick, NJ 08901",2,Sophomore,Cook/Douglass,,Apartment,TRUE
+47,"43 Dudley Rd, New Brunswick, NJ 08901",1,Freshman,Cook/Douglass,,Traditional,TRUE
+48,"42 Biel Rd, New Brunswick, NJ 08901",1,Freshman,Cook/Douglass,,Traditional,TRUE
+49,"36 Biel Rd, New Brunswick, NJ 08901",2,Sophomore,Cook/Douglass,,Apartment,TRUE
+50,,1,Freshman,Cook/Douglass,,Traditional,TRUE
+51,"49 Dudley Rd, New Brunswick, NJ 08901",1,All,Cook/Douglass,,Traditional,TRUE

@@ -1,0 +1,5 @@
+Pricing: https://ruoncampus.rutgers.edu/housing-info/rates-and-billing 
+
+- Always assuming most expensive option when there are options, but preferring undergraduate over graduate when available
+- Marvin: 1666 / month
+- If address is blank, choose name and use that for google maps but display nothing
