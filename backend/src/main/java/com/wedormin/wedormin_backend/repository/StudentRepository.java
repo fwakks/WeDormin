@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Long> {
@@ -20,6 +21,8 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
     List<Student> findByNameContainingIgnoreCase(@Param("name")String name);
 
+    Optional<Student> findByEmail(String email);
+
     @Query("""
     SELECT s FROM Student s 
     WHERE (:name IS NULL OR LOWER(s.name) LIKE LOWER(CONCAT('%', :name, '%')))
@@ -28,7 +31,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     AND (:class_year IS NULL OR s.class_year = :class_year)
     AND (:gender IS NULL OR s.gender = :gender)
     """)
-List<Student> filterStudents(@Param("name") String name, 
+    List<Student> filterStudents(@Param("name") String name, 
                              @Param("ruid") Long ruid,
                              @Param("age") Integer age,
                              @Param("class_year") Integer class_year,
