@@ -7,7 +7,7 @@ const path = require('path');
   const page = await browser.newPage();
   await page.goto('https://offcampushousing.rutgers.edu/listing?rent_style=per_person', { waitUntil: 'networkidle2' });
 
-  // Click the "Load More" button until all listings are loaded
+  // Click "Load More" until all listings are loaded
   let loadMoreVisible = true;
   while (loadMoreVisible) {
     try {
@@ -31,17 +31,15 @@ const path = require('path');
       // Number of Residents (Beds)
       const num_residents = card.querySelector('.generalInfo ul li:nth-child(2) span.strong')?.innerText.trim() || 'N/A';
 
-      // Image URL (assuming a div with class "property-image" has a background-image)
-      const imageDiv = card.querySelector('.property-image');
-      const image = imageDiv && imageDiv.style.backgroundImage 
-        ? imageDiv.style.backgroundImage.match(/url\(["']?([^"']*)["']?\)/)?.[1] || 'N/A' 
-        : 'N/A';
+      // Image URL
+      const image = card.querySelector('img')?.src || 'N/A';
 
-      // Location Type (Address)
+      // Location Type (off-campus)
       const location_type = 'off_campus';
 
-      // Square Footage (Size from unit table, may be empty)
-      const sq_ft = card.querySelector('.tabs.unitTab table tbody tr td:nth-child(3)')?.innerText.trim() || 'N/A';
+      // Square Footage (second-to-last <td> in unit table row)
+      const unitRow = card.querySelector('.tabs.unitTab table tbody tr');
+      const sq_ft = unitRow ? unitRow.querySelector('td:nth-last-child(2)')?.innerText.trim() || 'N/A' : 'N/A';
 
       // Availability
       const availabilityRaw = card.querySelector('.row.desktopInfo .col-sm-6.priceSec span')?.innerText.trim() || 'N/A';
@@ -50,7 +48,7 @@ const path = require('path');
       // Walk Time to Campus
       const walk_time_to_campus = card.querySelector('.generalInfo ul li:first-child span.strong')?.innerText.trim() || 'N/A';
 
-      // Amenities (combine all amenities from Unit and Property sections)
+      // Amenities (joined with commas, to be enclosed in quotes later)
       const amenities = Array.from(card.querySelectorAll('.amentiesMobile ul.amenityList li'))
         .map(li => li.innerText.trim())
         .join(', ') || 'N/A';
@@ -59,25 +57,27 @@ const path = require('path');
     });
   });
 
-  // Save data to CSV
+  // Generate CSV with all fields enclosed in double quotes
   const csvContent = [
-    ['Name', 'Price', 'Number of Residents', 'Image URL', 'Location Type', 'Square Footage', 'Availability', 'Walk Time to Campus', 'Amenities'],
+    ['Name', 'Price', 'Number of Residents', 'Image URL', 'Location Type', 'Square Footage', 'Availability', 'Walk Time to Campus', 'Amenities']
+      .map(header => `"${header}"`).join(','),
     ...listings.map(l => [
-      l.name, 
-      l.price, 
-      l.num_residents, 
-      l.image, 
-      l.location_type, 
-      l.sq_ft, 
-      l.availability, 
-      l.walk_time_to_campus, 
+      l.name,
+      l.price,
+      l.num_residents,
+      l.image,
+      l.location_type,
+      l.sq_ft,
+      l.availability,
+      l.walk_time_to_campus,
       l.amenities
-    ])
-  ].map(row => row.join(',')).join('\n');
+    ].map(field => `"${field}"`).join(','))
+  ].join('\n');
 
+  // Write to CSV file
   fs.writeFileSync(path.join(__dirname, 'full_off_campus.csv'), csvContent);
 
-  console.log('Data saved to full_off_campus.csv');
+  console.log('Scraping complete. Data written to full_off_campus.csv');
 
   await browser.close();
 })();
