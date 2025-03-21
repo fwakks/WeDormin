@@ -1,0 +1,52 @@
+﻿housing_id,num_rooms,min_class_year,campus,avg_lottery_number,housing_type,availability
+1,1,Freshman,Busch,,Traditional,TRUE
+2,2,All,Busch,,Traditional,TRUE
+3,1,Freshman,Busch,,Traditional,TRUE
+4,4,Graduate,Busch,,Apartment,TRUE
+5,3,Sophomore,Busch,,Suite,TRUE
+6,2,Graduate,Busch,,Apartment,TRUE
+7,3,Sophomore,Busch,,Suite,TRUE
+8,2,Graduate,Busch,,Apartment,TRUE
+9,1,Freshman,Busch,,Traditional,TRUE
+10,3,Sophomore,Busch,,Suite,TRUE
+11,1,Freshman,Busch,,Traditional,TRUE
+12,3,Sophomore,Busch,,Suite,TRUE
+13,2,Sophomore,Busch,,Apartment,TRUE
+14,2,Sophomore,Busch,,Apartment,TRUE
+15,2,Sophomore,Busch,,Apartment,TRUE
+16,3,Sophomore,Busch,,Suite,TRUE
+17,3,Sophomore,Busch,,Suite,TRUE
+18,4,Sophomore,Livingston,,Apartment,TRUE
+19,1,Sophomore,Livingston,,Traditional,TRUE
+20,1,Sophomore,Livingston,,Traditional,TRUE
+21,1,Sophomore,Livingston,,Traditional,TRUE
+22,1,Sophomore,Livingston,,Traditional,TRUE
+23,1,Sophomore,Livingston,,Traditional,TRUE
+24,1,Sophomore,College Avenue,,Traditional,TRUE
+25,1,Freshman,College Avenue,,Traditional,TRUE
+26,1,Sophomore,College Avenue,,Traditional,TRUE
+27,1,Freshman,College Avenue,,Traditional,TRUE
+28,1,Freshman,College Avenue,,Traditional,TRUE
+29,1,Sophomore,College Avenue,,Traditional,TRUE
+30,1,Sophomore,College Avenue,,Traditional,TRUE
+31,1,Freshman,College Avenue,,Traditional,TRUE
+32,1,Sophomore,College Avenue,,Traditional,TRUE
+33,1,Freshman,College Avenue,,Traditional,TRUE
+34,1,Sophomore,College Avenue,,Traditional,TRUE
+35,4,Sophomore,College Avenue,,Apartment,TRUE
+36,1,All,College Avenue,,Traditional,TRUE
+37,1,Freshman,College Avenue,,Traditional,TRUE
+38,2,Sophomore,College Avenue,,Apartment,TRUE
+39,1,Sophomore,College Avenue,,Traditional,TRUE
+40,1,All,Cook/Douglass,,Traditional,TRUE
+41,2,Sophomore,Cook/Douglass,,Apartment,TRUE
+42,1,Sophomore,Cook/Douglass,,Traditional,TRUE
+43,1,Freshman,Cook/Douglass,,Traditional,TRUE
+44,1,Freshman,Cook/Douglass,,Traditional,TRUE
+45,1,All,Cook/Douglass,,Traditional,TRUE
+46,2,Sophomore,Cook/Douglass,,Apartment,TRUE
+47,1,Freshman,Cook/Douglass,,Traditional,TRUE
+48,1,Freshman,Cook/Douglass,,Traditional,TRUE
+49,2,Sophomore,Cook/Douglass,,Apartment,TRUE
+50,1,Freshman,Cook/Douglass,,Traditional,TRUE
+51,1,All,Cook/Douglass,,Traditional,TRUE
