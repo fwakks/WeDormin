@@ -20,12 +20,14 @@ public class StudentController {
         this.embeddingService = embeddingService;
     }
 
+    // Get all students
     @GetMapping
     public ResponseEntity<List<Student>> getStudents() {
         List<Student> students = studentRepository.findAll();
         return ResponseEntity.ok(students);
     }
 
+    // Create a student
     @PostMapping
     public ResponseEntity<Student> createStudent(@RequestBody Student student) {
         Student savedStudent = studentRepository.save(student); 
@@ -34,6 +36,7 @@ public class StudentController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedStudent);
     }
 
+    // Get student by id
     @GetMapping("/{id}")
     public ResponseEntity<Student> getStudentById(@PathVariable Long id) {
         return studentRepository.findById(id)
@@ -41,6 +44,7 @@ public class StudentController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // Delete student by id
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteStudent(@PathVariable Long id) {
         return studentRepository.findById(id)
@@ -51,6 +55,7 @@ public class StudentController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // Get list of students similar to a student of given id
     @GetMapping("/{id}/similar/{limit}")
     public ResponseEntity<List<Student>> getSimilarStudents(@PathVariable Long id, @PathVariable int limit) {
         float[] vector = studentRepository.findById(id)
@@ -59,6 +64,7 @@ public class StudentController {
         return ResponseEntity.ok(studentRepository.findSimilarStudents(vector, limit));
     }
 
+    // Get embedding vector of student by id
     @GetMapping("/{id}/vector")
     public ResponseEntity<String> getStudentVector(@PathVariable Long id) {
         float[] vector = studentRepository.findById(id)
