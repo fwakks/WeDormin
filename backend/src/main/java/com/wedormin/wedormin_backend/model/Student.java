@@ -87,7 +87,6 @@ public class Student {
     public void setLottery_number(Integer lottery_number) { this.lottery_number = lottery_number; }
     public Integer getSeniority_points() { return seniority_points; }
     public void setSeniority_points(Integer seniority_points) { this.seniority_points = seniority_points; }
-
     public float[] getEmbedding() { return embedding; }
     public void setEmbedding(float[] embedding) { this.embedding = embedding; }
 }
