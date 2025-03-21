@@ -1,7 +1,6 @@
 package com.wedormin.wedormin_backend.controller;
 
 import com.wedormin.wedormin_backend.repository.StudentRepository;
-import com.wedormin.wedormin_backend.service.EmbeddingService;
 
 import com.wedormin.wedormin_backend.model.Student;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +14,9 @@ public class SearchController {
     
 
     private final StudentRepository studentRepository;
-    private final EmbeddingService embeddingService;
 
-    public SearchController(StudentRepository studentRepository, EmbeddingService embeddingService) {
+    public SearchController(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
-        this.embeddingService = embeddingService;
     }
 
     @GetMapping("/{name}")

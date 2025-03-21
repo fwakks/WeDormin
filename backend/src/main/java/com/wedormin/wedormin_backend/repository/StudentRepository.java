@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Long> {
@@ -19,6 +20,8 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     List<Student> findSimilarStudents(@Param("vector") float[] vector, @Param("limit") int limit);
 
     List<Student> findByNameContainingIgnoreCase(@Param("name")String name);
+
+    Optional<Student> findByEmail(String email);
 
     @Query("""
     SELECT s 
