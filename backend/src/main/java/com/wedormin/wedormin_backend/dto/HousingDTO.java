@@ -17,6 +17,7 @@ public class HousingDTO {
     private int num_residents;
     private String image;
     private String location_type;
+    private boolean availability;
 
 }
 

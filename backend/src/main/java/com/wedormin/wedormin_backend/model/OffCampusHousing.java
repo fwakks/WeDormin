@@ -16,7 +16,6 @@ import lombok.Setter;
 public class OffCampusHousing extends Housing {
 
     private Integer sq_ft;
-    private boolean availability;
     private Integer time_to_campus;
     
 }

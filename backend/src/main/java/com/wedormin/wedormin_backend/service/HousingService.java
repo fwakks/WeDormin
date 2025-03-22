@@ -68,6 +68,7 @@ public class HousingService {
         dto.setNum_residents(housing.getNum_residents());
         dto.setImage(housing.getImage());
         dto.setLocation_type(housing.getLocation_type());
+        dto.setAvailability(housing.isAvailability());
         return dto;
     }
 
@@ -82,13 +83,13 @@ public class HousingService {
         dto.setNum_residents(housing.getNum_residents());
         dto.setImage(housing.getImage());
         dto.setLocation_type(housing.getLocation_type());
+        dto.setAvailability(housing.isAvailability());
 
         dto.setNum_rooms(housing.getNum_rooms());
         dto.setMin_class_year(housing.getMin_class_year());
         dto.setCampus(housing.getCampus());
         dto.setAvg_lottery_number(housing.getAvg_lottery_number());
         dto.setHousing_type(housing.getHousing_type());
-        dto.setAvailability(housing.isAvailability());
 
         return dto;
     }
@@ -104,9 +105,9 @@ public class HousingService {
         dto.setNum_residents(housing.getNum_residents());
         dto.setImage(housing.getImage());
         dto.setLocation_type(housing.getLocation_type());
+        dto.setAvailability(housing.isAvailability());
 
         dto.setSq_ft(housing.getSq_ft());
-        dto.setAvailability(housing.isAvailability());
         dto.setTime_to_campus(housing.getTime_to_campus());
 
         return dto;

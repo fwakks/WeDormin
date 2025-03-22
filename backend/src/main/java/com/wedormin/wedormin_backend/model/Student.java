@@ -1,7 +1,6 @@
 package com.wedormin.wedormin_backend.model;
 
 import jakarta.persistence.Column;
-// import jakarta.persistence.Array;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -26,10 +25,10 @@ public class Student {
     private String housing_preference;
     private Integer lottery_number;
     private Integer seniority_points;
+    private String image;
 
     @Column(columnDefinition = "vector(1536)", nullable = true)
     @JdbcTypeCode(SqlTypes.VECTOR)
-    // @Array(length=1536)
     private float[] embedding;
 
     // Constructors
@@ -37,7 +36,7 @@ public class Student {
 
     public Student(Long ruid, String name, String email, int age, String gender, String class_year, String major, 
                    String about_me, String likes, String dislikes, String instagram_username, String linkedin_link, 
-                   String housing_preference, Integer lottery_number, Integer seniority_points) {
+                   String housing_preference, Integer lottery_number, Integer seniority_points, String image) {
         this.ruid = ruid;
         this.name = name;
         this.email = email;
@@ -53,6 +52,7 @@ public class Student {
         this.housing_preference = housing_preference;
         this.lottery_number = lottery_number;
         this.seniority_points = seniority_points;
+        this.image = image;
         this.embedding = null;
     }
 
@@ -87,6 +87,8 @@ public class Student {
     public void setLottery_number(Integer lottery_number) { this.lottery_number = lottery_number; }
     public Integer getSeniority_points() { return seniority_points; }
     public void setSeniority_points(Integer seniority_points) { this.seniority_points = seniority_points; }
+    public String getImage() { return image; }
+    public void setImage(String image) { this.image = image; }
     public float[] getEmbedding() { return embedding; }
     public void setEmbedding(float[] embedding) { this.embedding = embedding; }
 }

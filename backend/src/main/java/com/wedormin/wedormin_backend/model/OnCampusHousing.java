@@ -20,6 +20,5 @@ public class OnCampusHousing extends Housing {
     private String campus;
     private Integer avg_lottery_number;
     private String housing_type;
-    private boolean availability;
 
 }
