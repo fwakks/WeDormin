@@ -6,6 +6,9 @@ All the endpoints will be located in the ```controller/``` directory.
 
 - Get all students: ```GET``` http://localhost:8080/api/students
 - Create a student: ```POST``` http://localhost:8080/api/students
+- Update a student: ```PATCH``` http://localhost:808/api/students/{id}
+    - Pass a JSON object with the required info as a second argument
+    - Use headers: Content-Type: application/json
 - Get student by id: ```GET``` http://localhost:8080/api/students/{id}
 - Delete student by id: ```DELETE``` http://localhost:8080/api/students/{id}
 - Get list of students similar to a student of given id: ```GET``` http://localhost:8080/api/students/{id}/similar/{limit}
