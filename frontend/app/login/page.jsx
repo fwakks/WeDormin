@@ -9,8 +9,7 @@ export default function LoginPage() {
   const router = useRouter();
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("test");
-    router.push("/dashboard");
+    router.push("http://localhost:8080/oauth2/authorization/google");
   };
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
