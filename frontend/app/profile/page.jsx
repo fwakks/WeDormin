@@ -17,6 +17,16 @@ import ProfileTab from "@/components/profile-tab"
 import ProfileList from "@/components/profile-list"
 
 export default function Page() {
+  const cards = [
+    {
+      title: "Roommates",
+      value: "YESSIR"
+    },
+    {
+      title: "Dorm",
+      value: "YESSIR"
+    }
+  ];
   return (
     <SidebarProvider
       style={
@@ -42,7 +52,6 @@ export default function Page() {
               <div className="flex justify-center px-4 lg:px-6">
                 <Button>Edit</Button>
               </div>
-              <SectionCards />
             </div>
           </div>
         </div>
