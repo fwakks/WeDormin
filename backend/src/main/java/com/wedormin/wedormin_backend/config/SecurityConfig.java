@@ -20,7 +20,8 @@ public class SecurityConfig {
         return http
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/").permitAll();
-                    auth.requestMatchers("/register").authenticated();
+                    auth.requestMatchers("/api/public/**").permitAll();
+                    auth.requestMatchers("/dashboard", "/profile/**").authenticated();
                     auth.anyRequest().authenticated();
                 })
                 .oauth2Login(oauth2 -> oauth2

@@ -39,6 +39,11 @@ public class HomeController {
         return "dashboard";
     }
 
+    @GetMapping("/profile/edit")
+    public String profileEdit() {
+        return "profile-edit";
+    }
+
     @GetMapping("/register")
     public ResponseEntity<?> showRegistrationForm(HttpSession session, Authentication authentication) {
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
@@ -57,7 +62,7 @@ public class HomeController {
         Student newStudent = new Student();
         newStudent.setName(name);
         newStudent.setEmail(email);
-        newStudent.setOauth_id(oauthId);
+        newStudent.setOauthId(oauthId);
         // Set other required fields with default values if necessary
         
         // Save the new student

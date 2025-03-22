@@ -16,7 +16,7 @@ public class Student {
 
     private String name;
     private String email;
-    private String oauth_id;
+    private String oauthId;
     private Integer age;
     private String gender;
     private String class_year;
@@ -44,7 +44,7 @@ public class Student {
         this.ruid = ruid;
         this.name = name;
         this.email = email;
-        this.oauth_id = oauthId;
+        this.oauthId = oauthId;
         this.age = age;
         this.gender = gender;
         this.class_year = class_year;
@@ -68,8 +68,8 @@ public class Student {
     public void setName(String name) { this.name = name; }
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
-    public String getOauth_id() { return oauth_id; }
-    public void setOauth_id(String oauthId) { this.oauth_id = oauthId; }
+    public String getOauthId() { return oauthId; }
+    public void setOauthId(String oauthId) { this.oauthId = oauthId; }
     public int getAge() { return age; }
     public void setAge(int age) { this.age = age; }
     public String getGender() { return gender; }

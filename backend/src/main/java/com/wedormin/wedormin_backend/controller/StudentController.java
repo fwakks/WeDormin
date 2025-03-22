@@ -31,7 +31,7 @@ public class StudentController {
     @PostMapping
     public ResponseEntity<Student> createStudent(@RequestBody Student student) {
         // Make sure oauthId is set when creating a student
-        if (student.getOauth_id() == null) {
+        if (student.getOauthId() == null) {
             return ResponseEntity.badRequest().build();
         }
         
