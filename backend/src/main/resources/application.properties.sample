@@ -7,4 +7,6 @@ spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
 spring.datasource.driver-class-name=org.postgresql.Driver
 
+frontend.url=http://localhost:3000
+
 # Make an application.properties with this information and replace <db_username> and <password> with the right values.

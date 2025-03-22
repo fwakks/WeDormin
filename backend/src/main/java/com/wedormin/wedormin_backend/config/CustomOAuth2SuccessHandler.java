@@ -6,6 +6,7 @@ import com.wedormin.wedormin_backend.model.Student;
 import com.wedormin.wedormin_backend.repository.StudentRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -22,6 +23,9 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
     @Autowired
     private StudentRepository studentRepository;
 
+    @Value("${frontend.url}")
+    private String frontendUrl;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                        Authentication authentication) throws IOException, ServletException {
@@ -34,7 +38,7 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         
         if (existingStudent.isPresent()) {
             // User exists - redirect to dashboard or appropriate page
-            getRedirectStrategy().sendRedirect(request, response, "/dashboard");
+            getRedirectStrategy().sendRedirect(request, response, frontendUrl + "/dashboard");
         } else {
             // First-time user - create a basic profile
             Student newStudent = new Student();
@@ -43,7 +47,7 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
             newStudent.setOauthId(oauthId);
             
             // Save the student with basic info
-            Student savedStudent = studentRepository.save(newStudent);
+            studentRepository.save(newStudent);
             
             // Redirect to profile completion page
             getRedirectStrategy().sendRedirect(request, response, "/profile/edit");

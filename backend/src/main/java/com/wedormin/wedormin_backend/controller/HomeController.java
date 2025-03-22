@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.wedormin.wedormin_backend.model.Student;
 import com.wedormin.wedormin_backend.repository.StudentRepository;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 // import org.springframework.ui.Model;
@@ -19,6 +20,9 @@ import java.util.Optional;
 public class HomeController {
 
     private final StudentRepository studentRepository;
+
+    @Value("${frontend.url}")
+    private String frontendUrl;
 
     public HomeController(StudentRepository studentRepository){
         this.studentRepository = studentRepository;
@@ -55,7 +59,7 @@ public class HomeController {
         Optional<Student> existingStudent = studentRepository.findByOauthId(oauthId);
         if (existingStudent.isPresent()) {
             // User already exists, redirect to dashboard
-            return ResponseEntity.status(302).header("Location", "/dashboard").build();
+            return ResponseEntity.status(302).header("Location", frontendUrl + "/dashboard").build();
         }
 
         // User doesn't exist, create a new student
@@ -66,9 +70,9 @@ public class HomeController {
         // Set other required fields with default values if necessary
         
         // Save the new student
-        Student savedStudent = studentRepository.save(newStudent);
+        studentRepository.save(newStudent);
 
         // Redirect to dashboard or profile completion page
-        return ResponseEntity.status(302).header("Location", "/dashboard").build();
+        return ResponseEntity.status(302).header("Location", frontendUrl + "/dashboard").build();
     }
 }
