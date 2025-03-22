@@ -3,8 +3,11 @@ package com.wedormin.wedormin_backend.model;
 import jakarta.persistence.*;
 import java.time.Instant;
 
+import org.springframework.stereotype.Component;
+
 @Entity
 @Table(name = "messages")
+@Component
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +29,7 @@ public class Message {
 
     @Column(nullable = false)
     private Instant updatedAt = Instant.now();
+
 
     // Constructors
     public Message() {}
