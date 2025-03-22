@@ -3,14 +3,17 @@ package com.wedormin.wedormin_backend.controller;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.wedormin.wedormin_backend.model.Student;
 import com.wedormin.wedormin_backend.repository.StudentRepository;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.ui.Model;
+// import org.springframework.ui.Model;
 import jakarta.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.Map;
+// import java.util.HashMap;
+// import java.util.Map;
+import java.util.Optional;
 
 @RestController
 public class HomeController {
@@ -36,20 +39,31 @@ public class HomeController {
         return "dashboard";
     }
 
-   @GetMapping("/register")
-    public ResponseEntity<Map<String,String>> showRegistrationForm(HttpSession session, Model model, Authentication authentication) {
+    @GetMapping("/register")
+    public ResponseEntity<?> showRegistrationForm(HttpSession session, Authentication authentication) {
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         String email = oAuth2User.getAttribute("email");
-        String name = (String) session.getAttribute("oauth2Name");
+        String name = oAuth2User.getAttribute("name");
+        String oauthId = oAuth2User.getAttribute("sub");  // Get the OAuth ID
 
-        // Check if user already exists (shouldn’t happen due to success handler, but as a safeguard)
-        if (studentRepository.findByEmail(email).isPresent()) {
-            return ResponseEntity.status(302).header("Location","/dashboard").build();
+        // Check if user already exists
+        Optional<Student> existingStudent = studentRepository.findByOauthId(oauthId);
+        if (existingStudent.isPresent()) {
+            // User already exists, redirect to dashboard
+            return ResponseEntity.status(302).header("Location", "/dashboard").build();
         }
 
-        Map<String,String> response = new HashMap<>();
-        response.put("name", name);
-        response.put("email", email);
-        return ResponseEntity.ok(response);
+        // User doesn't exist, create a new student
+        Student newStudent = new Student();
+        newStudent.setName(name);
+        newStudent.setEmail(email);
+        newStudent.setOauth_id(oauthId);
+        // Set other required fields with default values if necessary
+        
+        // Save the new student
+        Student savedStudent = studentRepository.save(newStudent);
+
+        // Redirect to dashboard or profile completion page
+        return ResponseEntity.status(302).header("Location", "/dashboard").build();
     }
 }
