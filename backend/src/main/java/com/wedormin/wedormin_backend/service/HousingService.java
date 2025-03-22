@@ -13,6 +13,8 @@ import com.wedormin.wedormin_backend.model.Housing;
 import com.wedormin.wedormin_backend.model.OnCampusHousing;
 import com.wedormin.wedormin_backend.model.OffCampusHousing;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -55,6 +57,66 @@ public class HousingService {
         return offCampusHousingRepository.findAll().stream()
                 .map(this::convertToOffCampusDTO)
                 .collect(Collectors.toList());
+    }
+
+    // Filter Housing
+    public List<HousingDTO> filterAllHousing(
+        // Common filters
+        BigDecimal minPrice, BigDecimal maxPrice,
+        Integer minResidents, Integer maxResidents,
+        String locationType, Boolean availability,
+        // On-campus specific filters
+        String campus, String housingType, String minClassYear, Integer maxAvgLotteryNumber,
+        // Off-campus specific filters
+        Integer minSqFt, Integer maxSqFt, Integer maxTimeToCampus) {
+    
+        List<HousingDTO> results = new ArrayList<>();
+        
+        // Apply filters based on location type
+        if (locationType == null || "on_campus".equalsIgnoreCase(locationType)) {
+            // Get all on-campus housing that meets the basic criteria
+            List<OnCampusHousing> onCampusHousing = onCampusHousingRepository.findAll().stream()
+                .filter(h -> 
+                    (minPrice == null || h.getPrice().compareTo(minPrice) >= 0) &&
+                    (maxPrice == null || h.getPrice().compareTo(maxPrice) <= 0) &&
+                    (minResidents == null || h.getNum_residents() >= minResidents) &&
+                    (maxResidents == null || h.getNum_residents() <= maxResidents) &&
+                    (availability == null || h.isAvailability() == availability) &&
+                    (campus == null || campus.equals(h.getCampus())) &&
+                    (housingType == null || housingType.equals(h.getHousing_type())) &&
+                    (minClassYear == null || minClassYear.equals(h.getMin_class_year())) &&
+                    (maxAvgLotteryNumber == null || h.getAvg_lottery_number() <= maxAvgLotteryNumber)
+                )
+                .collect(Collectors.toList());
+                
+            // Convert to DTOs and add to results
+            results.addAll(onCampusHousing.stream()
+                .map(this::convertToOnCampusDTO)
+                .collect(Collectors.toList()));
+        }
+        
+        if (locationType == null || "off_campus".equalsIgnoreCase(locationType)) {
+            // Get all off-campus housing that meets the basic criteria
+            List<OffCampusHousing> offCampusHousing = offCampusHousingRepository.findAll().stream()
+                .filter(h -> 
+                    (minPrice == null || h.getPrice().compareTo(minPrice) >= 0) &&
+                    (maxPrice == null || h.getPrice().compareTo(maxPrice) <= 0) &&
+                    (minResidents == null || h.getNum_residents() >= minResidents) &&
+                    (maxResidents == null || h.getNum_residents() <= maxResidents) &&
+                    (availability == null || h.isAvailability() == availability) &&
+                    (minSqFt == null || h.getSq_ft() >= minSqFt) &&
+                    (maxSqFt == null || h.getSq_ft() <= maxSqFt) &&
+                    (maxTimeToCampus == null || h.getTime_to_campus() <= maxTimeToCampus)
+                )
+                .collect(Collectors.toList());
+                
+            // Convert to DTOs and add to results
+            results.addAll(offCampusHousing.stream()
+                .map(this::convertToOffCampusDTO)
+                .collect(Collectors.toList()));
+        }
+        
+        return results;
     }
 
     // Convert Housing entity to HousingDTO
