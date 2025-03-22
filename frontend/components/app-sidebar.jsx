@@ -47,12 +47,12 @@ const data = {
     },
     {
       title: "Housing",
-      url: "#",
+      url: "/housing",
       icon: IconListDetails,
     },
     {
       title: "Roommates",
-      url: "#",
+      url: "/roommates",
       icon: IconChartBar,
     },
     {
