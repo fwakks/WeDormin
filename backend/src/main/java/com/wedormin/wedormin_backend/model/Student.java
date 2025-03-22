@@ -2,6 +2,8 @@ package com.wedormin.wedormin_backend.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
@@ -9,10 +11,12 @@ import org.hibernate.type.SqlTypes;
 @Entity
 public class Student {
     @Id
-    private Long ruid;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long ruid; // Not really RUID, just some random id
 
     private String name;
     private String email;
+    private String oauthId;
     private Integer age;
     private String gender;
     private String class_year;
@@ -34,12 +38,13 @@ public class Student {
     // Constructors
     public Student() {}
 
-    public Student(Long ruid, String name, String email, int age, String gender, String class_year, String major, 
+    public Student(Long ruid, String name, String email, String oauthId, int age, String gender, String class_year, String major, 
                    String about_me, String likes, String dislikes, String instagram_username, String linkedin_link, 
                    String housing_preference, Integer lottery_number, Integer seniority_points, String image) {
         this.ruid = ruid;
         this.name = name;
         this.email = email;
+        this.oauthId = oauthId;
         this.age = age;
         this.gender = gender;
         this.class_year = class_year;
@@ -63,6 +68,8 @@ public class Student {
     public void setName(String name) { this.name = name; }
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
+    public String getOauthId() { return oauthId; }
+    public void setOauthId(String oauthId) { this.oauthId = oauthId; }
     public int getAge() { return age; }
     public void setAge(int age) { this.age = age; }
     public String getGender() { return gender; }

@@ -30,9 +30,14 @@ public class StudentController {
     // Create a student
     @PostMapping
     public ResponseEntity<Student> createStudent(@RequestBody Student student) {
-        Student savedStudent = studentRepository.save(student); 
+        // Make sure oauthId is set when creating a student
+        if (student.getOauthId() == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        
+        Student savedStudent = studentRepository.save(student);
         savedStudent.setEmbedding(embeddingService.generateVector(savedStudent));
-        savedStudent = studentRepository.findById(savedStudent.getRuid()).orElse(savedStudent); 
+        savedStudent = studentRepository.save(savedStudent);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedStudent);
     }
 

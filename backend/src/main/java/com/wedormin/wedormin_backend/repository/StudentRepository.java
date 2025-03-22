@@ -11,6 +11,9 @@ import java.util.Optional;
 
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Long> {
+
+    Optional<Student> findByOauthId(String oauthId);
+
     @Query(value = """
         SELECT * FROM student 
         ORDER BY embedding <-> CAST(:vector AS vector)
