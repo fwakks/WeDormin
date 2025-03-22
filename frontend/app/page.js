@@ -1,10 +1,16 @@
 "use client";
 
-import LoginPage from "./login/page.jsx"
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 
 export default function Home() {
-  return (<LoginPage />);
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push('login');
+  }, [router]);
+
 }
 
 // import Image from "next/image";
