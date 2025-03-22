@@ -5,9 +5,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
 
 import com.wedormin.wedormin_backend.dto.HousingDTO;
 import com.wedormin.wedormin_backend.dto.OffCampusHousingDTO;
+import com.wedormin.wedormin_backend.dto.OnCampusHousingClassifiedDTO;
 import com.wedormin.wedormin_backend.dto.OnCampusHousingDTO;
 import com.wedormin.wedormin_backend.service.HousingService;
 
@@ -64,6 +66,13 @@ public class HousingController {
             campus, housingType, minClassYear, maxAvgLotteryNumber,
             minSqFt, maxSqFt, maxTimeToCampus);
     }
-}
+
+    // Get classified on-campus housing
+    @GetMapping("/oncampus/classified")
+    public ResponseEntity<List<OnCampusHousingClassifiedDTO>> getClassifiedOnCampusHousing() {
+        List<OnCampusHousingClassifiedDTO> classifiedHousing = housingService.getClassifiedOnCampusHousing();
+        return ResponseEntity.ok(classifiedHousing);
+    }
+}   
 
 // Controller calls the service instead of repository

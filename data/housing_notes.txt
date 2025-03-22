@@ -1,4 +1,5 @@
 Pricing: https://ruoncampus.rutgers.edu/housing-info/rates-and-billing 
+Housing number info: https://docs.google.com/spreadsheets/d/1rjjb57TRVglXrnXDeOyscmWNoJAv67wr_fP3dGk7m38/edit
 
 - Always assuming most expensive option when there are options, but preferring undergraduate over graduate when available
 - Marvin: 1666 / month
@@ -8,3 +9,13 @@ Pricing: https://ruoncampus.rutgers.edu/housing-info/rates-and-billing
     - Freshman means only freshmen 
     - Sophomore means sophomores and up
     - All means any grade
+- Freshman only dorms don't follow housing number system
+    - For these dorms, i am putting 12000 as the number
+    - Honors College and BEST are also getting 12000
+- Lottery Number: 1 to 12000
+- Seniority points:
+    - Freshman: 1
+    - Sophomore: 2
+    - Junior: 3
+    - Senior: 4
+- Even though its called avg_lottery_number, treat it as a cutoff
