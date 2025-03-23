@@ -9,7 +9,8 @@ export default function LoginPage() {
   const router = useRouter();
   const handleSubmit = (event) => {
     event.preventDefault();
-    router.push("http://localhost:8080/oauth2/authorization/google");
+    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+    router.push(`${baseUrl}/oauth2/authorization/google`);
   };
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
