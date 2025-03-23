@@ -21,6 +21,7 @@ export default function HousingPage() {
     minPrice: 0,
     maxPrice: 10000,
     locationType: "all",
+    housingType: "all",
     campus: "all",
     availability: true,
   })
@@ -69,6 +70,7 @@ export default function HousingPage() {
         if (filters.maxPrice < 10000) queryParams.append("maxPrice", filters.maxPrice.toString())
         if (filters.locationType !== "all") queryParams.append("locationType", filters.locationType)
         if (filters.campus !== "all") queryParams.append("campus", filters.campus)
+        if (filters.housingType !== "all") queryParams.append("housingType", filters.housingType)
         queryParams.append("availability", filters.availability.toString())
 
         const response = await fetch(`/api/housing/filter?${queryParams.toString()}`)
@@ -84,6 +86,7 @@ export default function HousingPage() {
             house.price >= filters.minPrice &&
             house.price <= filters.maxPrice &&
             (filters.locationType === "all" || house.location_type === filters.locationType) &&
+            (filters.housingType === "all" || house.housing_type === filters.housingType) &&
             (filters.campus === "all" || house.campus === filters.campus) &&
             house.availability === filters.availability
           )
