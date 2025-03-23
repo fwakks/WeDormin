@@ -8,11 +8,11 @@ import {
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
-function FaceCard() {
+function FaceCard({ size }) {
   return (
     <Card className="@container/card gap-4">
       <CardHeader className="flex flex-col items-center gap-2">
-        <Avatar className="h-32 w-32 rounded-lg">
+        <Avatar className={`h-${size} w-${size} rounded-lg`}>
           <AvatarImage></AvatarImage>
           <AvatarFallback></AvatarFallback>
         </Avatar>

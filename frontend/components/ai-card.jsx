@@ -29,13 +29,13 @@ function AiCard({ cards }) {
       </CardHeader>
       <CardFooter className="flex flex-row gap-1.5 text-sm">
         <div className="flex-grow">
-          <FaceCard></FaceCard>
+          <FaceCard size={32} />
         </div>
         <div className="flex-grow">
-          <FaceCard></FaceCard>
+          <FaceCard size={32} />
         </div>
         <div className="flex-grow">
-          <FaceCard></FaceCard>
+          <FaceCard size={32} />
         </div>
       </CardFooter>
     </Card>
