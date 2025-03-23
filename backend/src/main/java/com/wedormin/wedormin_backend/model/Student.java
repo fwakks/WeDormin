@@ -70,7 +70,7 @@ public class Student {
     public void setEmail(String email) { this.email = email; }
     public String getOauthId() { return oauthId; }
     public void setOauthId(String oauthId) { this.oauthId = oauthId; }
-    public int getAge() { return age; }
+    public Integer getAge() { return age; }
     public void setAge(int age) { this.age = age; }
     public String getGender() { return gender; }
     public void setGender(String gender) { this.gender = gender; }

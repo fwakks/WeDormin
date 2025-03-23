@@ -80,7 +80,7 @@ export default function Page() {
           queryParams.append("gender", filters.gender);
 
         const response = await fetch(
-          `http://localhost:8080/api/students/filter?${queryParams.toString()}`
+          `/api/students/filter?${queryParams.toString()}`
         );
         const data = await response.json();
 
