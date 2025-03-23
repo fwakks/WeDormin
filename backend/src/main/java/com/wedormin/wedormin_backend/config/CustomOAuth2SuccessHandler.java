@@ -50,7 +50,7 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
             studentRepository.save(newStudent);
             
             // Redirect to profile completion page
-            getRedirectStrategy().sendRedirect(request, response, "/profile/edit");
+            getRedirectStrategy().sendRedirect(request, response, frontendUrl + "/dashboard");
         }
     }
 }
