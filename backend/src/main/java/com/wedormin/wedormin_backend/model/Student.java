@@ -1,5 +1,6 @@
 package com.wedormin.wedormin_backend.model;
 
+import jakarta.persistence.Table;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,6 +10,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 @Entity
+@Table(name = "student", schema = "public")
 public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
