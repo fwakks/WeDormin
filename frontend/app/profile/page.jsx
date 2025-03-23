@@ -56,7 +56,7 @@ export default function Page() {
               </div>
               <ProfileList></ProfileList>
               <div className="flex justify-center px-4 lg:px-6">
-                <ProfileEdit onSubmit={handleSubmit}></ProfileEdit>
+                <ProfileEdit onSubmit={handleSubmit} isModal={true}></ProfileEdit>
               </div>
             </div>
           </div>
