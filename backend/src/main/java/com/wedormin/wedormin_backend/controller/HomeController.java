@@ -10,6 +10,8 @@ import com.wedormin.wedormin_backend.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+
 import jakarta.servlet.http.HttpSession;
 import java.util.Optional;
 
@@ -71,5 +73,37 @@ public class HomeController {
 
         // Redirect to dashboard or profile completion page
         return ResponseEntity.status(302).header("Location", frontendUrl + "/dashboard").build();
+    }
+
+    @GetMapping("/api/user")
+    public ResponseEntity<?> getUserDetails(@AuthenticationPrincipal OAuth2User principal) {
+        String oauthId = principal.getAttribute("sub"); // Assuming 'sub' is the OAuth ID
+        Optional<Student> studentOpt = studentRepository.findByOauthId(oauthId);
+
+        if (studentOpt.isPresent()) {
+            Student student = studentOpt.get();
+            return ResponseEntity.ok(new UserDTO(student.getRuid().toString(), student.getLottery_number()));
+        } else {
+            return ResponseEntity.status(404).body("User not found");
+        }
+    }
+
+    // DTO class to send user details
+    public static class UserDTO {
+        private String ruid;
+        private Integer lotteryNumber;
+
+        public UserDTO(String ruid, Integer lotteryNumber) {
+            this.ruid = ruid;
+            this.lotteryNumber = lotteryNumber;
+        }
+
+        public String getRuid() {
+            return ruid;
+        }
+
+        public Integer getLotteryNumber() {
+            return lotteryNumber;
+        }
     }
 }

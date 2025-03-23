@@ -29,6 +29,8 @@ import {
 import Image from "next/image"
 
 export function HousingDetail({ housing, onClose }) {
+  console.log("Housing data in detail component:", housing)
+
   const amenitiesList = housing.amenities.split(",").map((item) => item.trim())
 
   const getAmenityIcon = (amenity) => {
@@ -131,6 +133,40 @@ export function HousingDetail({ housing, onClose }) {
               <div className="mt-4">
                 <h4 className="font-medium mb-1">Average Lottery Number</h4>
                 <p>{housing.avg_lottery_number}</p>
+              </div>
+            )}
+
+            {housing.location_type === "on_campus" && (
+              <div className="mt-4">
+                <h4 className="font-medium mb-1">Your Chance</h4>
+                <div
+                  className={`inline-block px-3 py-1 rounded-md text-sm font-medium ${
+                    housing.chanceClassification === "high"
+                      ? "bg-green-100 text-green-800"
+                      : housing.chanceClassification === "medium"
+                        ? "bg-yellow-100 text-yellow-800"
+                        : housing.chanceClassification === "low"
+                          ? "bg-red-100 text-red-800"
+                          : "bg-gray-100 text-gray-800"
+                  }`}
+                >
+                  {housing.chanceClassification === "high"
+                    ? "High Chance"
+                    : housing.chanceClassification === "medium"
+                      ? "Medium Chance"
+                      : housing.chanceClassification === "low"
+                        ? "Low Chance"
+                        : "Unknown Chance"}
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  {housing.chanceClassification === "high"
+                    ? "Your lottery number gives you a good chance of securing this housing."
+                    : housing.chanceClassification === "medium"
+                      ? "Your lottery number gives you a moderate chance of securing this housing."
+                      : housing.chanceClassification === "low"
+                        ? "Your lottery number may make it difficult to secure this housing."
+                        : "Chance calculation unavailable."}
+                </p>
               </div>
             )}
           </div>
