@@ -25,10 +25,38 @@ export default function HousingPage() {
     campus: "all",
     availability: true,
   })
+  const [user, setUser] = useState({ ruid: null, lottery_number: null })
 
   const itemsPerPage = 8
 
   useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || '';
+        const response = await fetch(`${apiBaseUrl}/api/user`, {
+          credentials: 'include'
+        })
+        if (!response.ok) {
+          throw new Error("Failed to fetch user data")
+        }
+        const userData = await response.json()
+        // Match the property names from the API response
+        setUser({ 
+          ruid: userData.ruid, 
+          lottery_number: userData.lotteryNumber
+        })
+        console.log("User data:", userData)
+      } catch (error) {
+        console.error("Error fetching user data:", error)
+      }
+    }
+  
+    fetchUser()
+  }, [])
+
+  useEffect(() => {
+    console.log("Current user lottery number:", user.lottery_number);
+
     const fetchHousing = async () => {
       setLoading(true)
       try {
@@ -47,7 +75,14 @@ export default function HousingPage() {
         const onCampusData = await onCampusResponse.json()
         const offCampusData = await offCampusResponse.json()
   
-        const allHousing = [...onCampusData, ...offCampusData]
+        // Add chance classification to on-campus housing
+        const enhancedOnCampusData = onCampusData.map(housing => ({
+          ...housing,
+          chanceClassification: calculateChance(user.lottery_number, housing.avg_lottery_number)
+        }))
+  
+        const allHousing = [...enhancedOnCampusData, ...offCampusData]
+        console.log("Housing data with chance classification:", allHousing)
         setHousing(allHousing)
         setFilteredHousing(allHousing)
       } catch (error) {
@@ -58,7 +93,27 @@ export default function HousingPage() {
     }
   
     fetchHousing()
-  }, [])
+  }, [user.lottery_number])
+
+  // Calculate chance classification based on lottery numbers
+  const calculateChance = (userLotteryNumber, avgLotteryNumber) => {
+    // Convert to numbers and check if valid
+    const userNum = Number(userLotteryNumber);
+    const avgNum = Number(avgLotteryNumber);
+    
+    if (isNaN(userNum) || isNaN(avgNum) || !userNum || !avgNum) {
+      console.log("Invalid lottery numbers:", { user: userLotteryNumber, avg: avgLotteryNumber });
+      return "unknown";
+    }
+    
+    if (userNum <= avgNum * 0.8) {
+      return "high";
+    } else if (userNum <= avgNum * 1.2) {
+      return "medium";
+    } else {
+      return "low";
+    }
+  }
 
   useEffect(() => {
     const applyFilters = async () => {
@@ -80,7 +135,13 @@ export default function HousingPage() {
         })
         const data = await response.json()
 
-        setFilteredHousing(data)
+        const enhancedData = data.map(house => ({
+          ...house,
+          chanceClassification: house.location_type === "on_campus" ? 
+            calculateChance(user.lottery_number, house.avg_lottery_number) : undefined
+        }))
+        
+        setFilteredHousing(enhancedData)
         setCurrentPage(1) // Reset to first page when filters change
       } catch (error) {
         console.error("Error applying filters:", error)

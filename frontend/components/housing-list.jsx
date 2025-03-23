@@ -16,6 +16,7 @@ import { formatCurrency } from "@/lib/utils"
 import Image from "next/image"
 
 export function HousingList({ housing, onSelect, currentPage, totalPages, onPageChange }) {
+  console.log("Housing data in list component:", housing)
   const renderPagination = () => {
     const pages = []
     const maxVisiblePages = 5
@@ -104,13 +105,16 @@ export function HousingList({ housing, onSelect, currentPage, totalPages, onPage
               <h3 className="font-semibold text-lg line-clamp-1">{house.name}</h3>
               <p className="text-sm text-muted-foreground line-clamp-1">{house.address}</p>
             </CardHeader>
-            <CardContent className="pb-2">
+            <CardContent className="pb-0">
               <div className="flex justify-between items-center">
                 <div>
                   <p className="font-medium text-lg">{formatCurrency(house.price)}</p>
                   <p className="text-sm text-muted-foreground">
-                    {house.name === "Marvin Apartments" ? "per month" : 
-                      house.location_type === "on_campus" ? "per year" : "per month"}
+                    {house.name === "Marvin Apartments"
+                      ? "per month"
+                      : house.location_type === "on_campus"
+                        ? "per year"
+                        : "per month"}
                   </p>
                 </div>
                 <div className="text-right">
@@ -125,8 +129,32 @@ export function HousingList({ housing, onSelect, currentPage, totalPages, onPage
                   )}
                 </div>
               </div>
+
+              {house.location_type === "on_campus" && (
+                <div className="mt-2 w-full">
+                  <div
+                    className={`text-xs font-medium px-2 py-1 rounded-md text-center ${
+                      house.chanceClassification === "high"
+                        ? "bg-green-100 text-green-800"
+                        : house.chanceClassification === "medium"
+                          ? "bg-yellow-100 text-yellow-800"
+                          : house.chanceClassification === "low"
+                            ? "bg-red-100 text-red-800"
+                            : "bg-gray-100 text-gray-800"
+                    }`}
+                  >
+                    {house.chanceClassification === "high"
+                      ? "High Chance"
+                      : house.chanceClassification === "medium"
+                        ? "Medium Chance"
+                        : house.chanceClassification === "low"
+                          ? "Low Chance"
+                          : "Unknown Chance"}
+                  </div>
+                </div>
+              )}
             </CardContent>
-            <CardFooter>
+            <CardFooter className="pt-1 mt-0">
               <Button variant="ghost" className="w-full" onClick={() => onSelect(house)}>
                 View Details
               </Button>
