@@ -27,9 +27,9 @@ function FaceCard({
         </div>
       </CardHeader>
       <CardFooter className="flex justify-center gap-1.5 text-sm">
-        <div className="line-clamp-1 flex gap-2 font-medium">Light Sleeper</div>
-        <div className="line-clamp-1 flex gap-2 font-medium">Light Sleeper</div>
-        <div className="line-clamp-1 flex gap-2 font-medium">Light Sleeper</div>
+        <div className="line-clamp-1 flex gap-2 font-medium">{student.age}</div>
+        <div className="line-clamp-1 flex gap-2 font-medium">{student.class_year}</div>
+        <div className="line-clamp-1 flex gap-2 font-medium">{student.major}</div>
       </CardFooter>
     </Card>
   );

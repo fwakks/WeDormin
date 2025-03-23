@@ -57,10 +57,8 @@ function AiCard() {
         <CardDescription>people WeThinkin you might like</CardDescription>
         <CardAction>
           <Button onClick={handleClick}>
-            <Badge variant="outline">
-              <IconTrendingUp />
-              Generate
-            </Badge>
+            <IconTrendingUp />
+            Generate
           </Button>
         </CardAction>
       </CardHeader>
