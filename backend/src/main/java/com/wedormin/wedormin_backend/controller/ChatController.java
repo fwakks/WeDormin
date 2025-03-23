@@ -5,6 +5,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.util.HtmlUtils;
+import org.springframework.messaging.handler.annotation.Payload;
 
 import com.wedormin.wedormin_backend.repository.ChatMessageRepository;
 import com.wedormin.wedormin_backend.repository.ChatRepository;
@@ -20,7 +21,6 @@ import com.wedormin.wedormin_backend.model.Chat;
 import com.wedormin.wedormin_backend.model.ChatMessage;
 import com.wedormin.wedormin_backend.model.Student;
 import com.wedormin.wedormin_backend.dto.ChatMessageDTO;
-import com.wedormin.wedormin_backend.repository.ChatMessageRepository;
 import com.wedormin.wedormin_backend.repository.StudentRepository;
 
 @RestController
@@ -41,7 +41,7 @@ public class ChatController {
     
     @MessageMapping("/sendMessage")
     @SendTo("/topic/messages")
-    public ChatMessage handleMessage(ChatMessageDTO messageDto) {
+    public ChatMessage handleMessage(@Payload ChatMessageDTO messageDto) {
         // Retrieve the student by ruid (assuming you get ruid from messageDto)
         Optional<Student> studentOpt = studentRepository.findById(messageDto.getRuid());
     
