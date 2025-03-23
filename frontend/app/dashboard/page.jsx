@@ -1,6 +1,7 @@
+'use client';
+
+import { useState, useEffect } from "react"
 import { AppSidebar } from "@/components/app-sidebar"
-import { ChartAreaInteractive } from "@/components/chart-area-interactive"
-import { DataTable } from "@/components/data-table"
 import { SectionCards } from "@/components/section-cards"
 import { SiteHeader } from "@/components/site-header"
 import {
@@ -9,10 +10,9 @@ import {
 } from "@/components/ui/sidebar"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 
-import data from "./data.json"
-import MapCard from "@/components/map-card"
-
 export default function Page() {
+  const [user, setUser] = useState({ name: null })
+
   const cards = [
     {
       title: "Roommates",
@@ -23,6 +23,38 @@ export default function Page() {
       value: "YESSIR"
     }
   ];
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || '';
+        const response = await fetch(`${apiBaseUrl}/api/user`, {
+          credentials: 'include'
+        })
+        if (!response.ok) {
+          throw new Error("Failed to fetch user data")
+        }
+        const userData = await response.json()
+        setUser({ 
+          name: userData.name, 
+        })
+      } catch (error) {
+        console.error("Error fetching user data:", error)
+      }
+    }
+  
+    fetchUser()
+  }, [])
+
+  // Function to get initials from name
+  const getInitials = (name) => {
+    if (!name) return "U";
+    return name
+      .split(" ")
+      .map(part => part[0])
+      .join("")
+      .toUpperCase();
+  };
 
   return (
     <SidebarProvider
@@ -40,16 +72,13 @@ export default function Page() {
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
               <div className="grid grid-cols-1 place-items-center px-4 lg:px-6">
                 <Avatar className="h-24 w-24 rounded-lg grayscale">
-                  <AvatarImage src={"/globe.svg"} alt={"globe"} />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  <AvatarFallback className="rounded-lg text-4xl">{getInitials(user.name)}</AvatarFallback>
                 </Avatar>
-                <p className="text-lg">John Doe</p>
+                <p className="text-lg">{user.name || "User"}</p>
               </div>
               <SectionCards cards={cards} width={2}/>
               <div className="px-4 lg:px-6">
-                <ChartAreaInteractive />
               </div>
-              <DataTable data={data} />
             </div>
           </div>
         </div>

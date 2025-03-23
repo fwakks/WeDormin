@@ -13,10 +13,20 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import jakarta.servlet.http.HttpSession;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Optional;
 
 @RestController
 public class HomeController {
+
+    private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
     private final StudentRepository studentRepository;
 
@@ -47,17 +57,39 @@ public class HomeController {
         return "profile-edit";
     }
 
+    @GetMapping ("/register-student")
+    public ResponseEntity<Student> getOauth(HttpSession session, Authentication authentication) {
+        OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
+        String email = oAuth2User.getAttribute("email");
+        String name = oAuth2User.getAttribute("name");
+        String oauthId = oAuth2User.getAttribute("sub");  // Get the OAuth ID
+        System.out.println("WAAA " + email + " " + name + " " + oauthId);
+        
+        // User doesn't exist, create a new student
+        Student newStudent = new Student();
+        newStudent.setName(name);
+        newStudent.setEmail(email);
+        newStudent.setOauthId(oauthId);
+       
+        return ResponseEntity.ok(newStudent);
+    }
+
     @GetMapping("/register")
     public ResponseEntity<?> showRegistrationForm(HttpSession session, Authentication authentication) {
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         String email = oAuth2User.getAttribute("email");
         String name = oAuth2User.getAttribute("name");
         String oauthId = oAuth2User.getAttribute("sub");  // Get the OAuth ID
+        String googleProfileImage = oAuth2User.getAttribute("picture");
+        System.out.println("Saving student with image: " + googleProfileImage);
+
+        logger.info("OAuth Login - Name: {}, Email: {}, OAuth ID: {}, Profile Image: {}", 
+                     name, email, oauthId, googleProfileImage);
 
         // Check if user already exists
         Optional<Student> existingStudent = studentRepository.findByOauthId(oauthId);
         if (existingStudent.isPresent()) {
-            // User already exists, redirect to dashboard
+            logger.info("User already exists: {}", existingStudent.get().getEmail());
             return ResponseEntity.status(302).header("Location", frontendUrl + "/dashboard").build();
         }
 
@@ -66,13 +98,18 @@ public class HomeController {
         newStudent.setName(name);
         newStudent.setEmail(email);
         newStudent.setOauthId(oauthId);
-        // Set other required fields with default values if necessary
-        
+        newStudent.setImage(googleProfileImage);
+
+        // Debugging: Log the new student details before saving
+        logger.info("Saving new user: {}", newStudent);
+
         // Save the new student
         studentRepository.save(newStudent);
 
+        logger.info("New user registered successfully with image: {}", newStudent.getImage());
+
         // Redirect to dashboard or profile completion page
-        return ResponseEntity.status(302).header("Location", frontendUrl + "/dashboard").build();
+        return ResponseEntity.ok(newStudent);
     }
 
     @GetMapping("/api/user")
@@ -82,28 +119,27 @@ public class HomeController {
 
         if (studentOpt.isPresent()) {
             Student student = studentOpt.get();
-            return ResponseEntity.ok(new UserDTO(student.getRuid().toString(), student.getLottery_number()));
+            return ResponseEntity.ok(new UserDTO(
+                student.getRuid(), 
+                student.getName(), 
+                student.getEmail(), 
+                student.getLottery_number(), 
+                student.getImage()));
         } else {
             return ResponseEntity.status(404).body("User not found");
         }
     }
 
     // DTO class to send user details
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class UserDTO {
-        private String ruid;
+        private Long ruid;
+        private String name;
+        private String email;
         private Integer lotteryNumber;
-
-        public UserDTO(String ruid, Integer lotteryNumber) {
-            this.ruid = ruid;
-            this.lotteryNumber = lotteryNumber;
-        }
-
-        public String getRuid() {
-            return ruid;
-        }
-
-        public Integer getLotteryNumber() {
-            return lotteryNumber;
-        }
+        private String image;
     }
 }

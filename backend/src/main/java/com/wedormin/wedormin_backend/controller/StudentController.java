@@ -3,6 +3,9 @@ package com.wedormin.wedormin_backend.controller;
 import com.wedormin.wedormin_backend.model.Student;
 import com.wedormin.wedormin_backend.repository.StudentRepository;
 import com.wedormin.wedormin_backend.service.EmbeddingService;
+
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -96,6 +99,7 @@ public class StudentController {
             }
         });
 
+        student.setEmbedding(embeddingService.generateVector(student));
         Student updatedStudent = studentRepository.save(student);
         return ResponseEntity.ok(updatedStudent);
     }
@@ -154,6 +158,15 @@ public class StudentController {
     public ResponseEntity<List<Student>> searchByName(@RequestParam(required = false) String name) {
         List<Student> students = studentRepository.searchByName(name);
         return ResponseEntity.ok(students);
+    }
+
+    @GetMapping("/base-student")
+    public ResponseEntity<Student> getOAuthData(HttpSession session) {
+        Student oauthData = (Student) session.getAttribute("baseStudent");
+        if (oauthData == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return ResponseEntity.ok(oauthData);
     }
 
 }

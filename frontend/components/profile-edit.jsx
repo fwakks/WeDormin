@@ -37,6 +37,7 @@ export function ProfileEdit({ onSubmit, isModal = false }) {
                 type="text" 
                 placeholder="Enter here..."
                 required = {field.required}
+                name = {field.id}
                   />
                 
               </div>
