@@ -13,6 +13,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import jakarta.servlet.http.HttpSession;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.Optional;
 
 @RestController
@@ -82,28 +87,22 @@ public class HomeController {
 
         if (studentOpt.isPresent()) {
             Student student = studentOpt.get();
-            return ResponseEntity.ok(new UserDTO(student.getRuid().toString(), student.getLottery_number()));
+            return ResponseEntity.ok(new UserDTO(student.getRuid(), student.getName(), student.getEmail(), student.getLottery_number(), student.getImage()));
         } else {
             return ResponseEntity.status(404).body("User not found");
         }
     }
 
     // DTO class to send user details
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class UserDTO {
-        private String ruid;
+        private Long ruid;
+        private String name;
+        private String email;
         private Integer lotteryNumber;
-
-        public UserDTO(String ruid, Integer lotteryNumber) {
-            this.ruid = ruid;
-            this.lotteryNumber = lotteryNumber;
-        }
-
-        public String getRuid() {
-            return ruid;
-        }
-
-        public Integer getLotteryNumber() {
-            return lotteryNumber;
-        }
+        private String image;
     }
 }

@@ -26,3 +26,7 @@ All the endpoints will be located in the ```controller/``` directory.
     - ```GET``` http://localhost:8080/api/housing/filter?minPrice=500&maxPrice=10000&locationType=on_campus&campus=Busch&availability=true
     - ```GET``` http://localhost:8080/api/housing/filter?maxTimeToCampus=10&locationType=off_campus
     - See ```filterHousing()``` in HousingController.java for all arguments
+
+## Home
+
+- Get authenticated user's information: ```GET``` http://localhost:8080/api/user
