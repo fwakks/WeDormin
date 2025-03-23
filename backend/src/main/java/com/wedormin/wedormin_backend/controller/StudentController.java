@@ -98,6 +98,7 @@ public class StudentController {
             }
         });
         
+        student.setEmbedding(embeddingService.generateVector(student));
         Student updatedStudent = studentRepository.save(student);
         return ResponseEntity.ok(updatedStudent);
     }
