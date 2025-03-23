@@ -27,15 +27,16 @@ function AiCard({ cards }) {
           </Badge>
         </CardAction>
       </CardHeader>
-      <CardFooter className="flex justify-center gap-1.5 text-sm">
-        <div className="line-clamp-1 flex gap-2 font-medium">
-          Trending up this month
-          <IconTrendingUp className="size-4" />
+      <CardFooter className="flex flex-row gap-1.5 text-sm">
+        <div className="flex-grow">
+          <FaceCard size={32} />
         </div>
-        <div className="text-muted-foreground">
-          Visitors for the last 6 months
+        <div className="flex-grow">
+          <FaceCard size={32} />
         </div>
-        <FaceCard></FaceCard>
+        <div className="flex-grow">
+          <FaceCard size={32} />
+        </div>
       </CardFooter>
     </Card>
   );

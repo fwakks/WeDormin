@@ -11,6 +11,7 @@ import {
   IconFileWord,
   IconFolder,
   IconHelp,
+  IconHome,
   IconInnerShadowTop,
   IconListDetails,
   IconReport,
@@ -48,7 +49,7 @@ const data = {
     {
       title: "Housing",
       url: "/housing",
-      icon: IconListDetails,
+      icon: IconHome,
     },
     {
       title: "Roommates",

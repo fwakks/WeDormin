@@ -10,10 +10,7 @@ import com.wedormin.wedormin_backend.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-// import org.springframework.ui.Model;
 import jakarta.servlet.http.HttpSession;
-// import java.util.HashMap;
-// import java.util.Map;
 import java.util.Optional;
 
 @RestController

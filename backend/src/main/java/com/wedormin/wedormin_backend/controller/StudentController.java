@@ -41,6 +41,65 @@ public class StudentController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedStudent);
     }
 
+    // Update a student by any number of arguments
+    @PatchMapping("/{id}")
+    public ResponseEntity<Student> updateStudent(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
+        Optional<Student> optionalStudent = studentRepository.findById(id);
+        if (optionalStudent.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Student student = optionalStudent.get();
+        updates.forEach((key, value) -> {
+            switch (key) {
+                case "age":
+                    student.setAge((Integer) value);
+                    break;
+                case "gender":
+                    student.setGender((String) value);
+                    break;
+                case "class_year":
+                    student.setClass_year((String) value);
+                    break;
+                case "major":
+                    student.setMajor((String) value);
+                    break;
+                case "about_me":
+                    student.setAbout_me((String) value);
+                    break;
+                case "likes":
+                    student.setLikes((String) value);
+                    break;
+                case "dislikes":
+                    student.setDislikes((String) value);
+                    break;
+                case "instagram_username":
+                    student.setInstagram_username((String) value);
+                    break;
+                case "linkedin_link":
+                    student.setLinkedin_link((String) value);
+                    break;
+                case "housing_preference":
+                    student.setHousing_preference((String) value);
+                    break;
+                case "lottery_number":
+                    student.setLottery_number((Integer) value);
+                    break;
+                case "seniority_points":
+                    student.setSeniority_points((Integer) value);
+                    break;
+                case "image":
+                    student.setImage((String) value);
+                    break;
+                default:
+                    throw new IllegalArgumentException("Invalid field: " + key);
+            }
+        });
+
+        Student updatedStudent = studentRepository.save(student);
+        return ResponseEntity.ok(updatedStudent);
+    }
+
     // Get student by id
     @GetMapping("/{id}")
     public ResponseEntity<Student> getStudentById(@PathVariable Long id) {
