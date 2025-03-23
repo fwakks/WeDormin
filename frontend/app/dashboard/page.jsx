@@ -1,6 +1,4 @@
 import { AppSidebar } from "@/components/app-sidebar"
-import { ChartAreaInteractive } from "@/components/chart-area-interactive"
-import { DataTable } from "@/components/data-table"
 import { SectionCards } from "@/components/section-cards"
 import { SiteHeader } from "@/components/site-header"
 import {
@@ -8,9 +6,6 @@ import {
   SidebarProvider,
 } from "@/components/ui/sidebar"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
-
-import data from "./data.json"
-import MapCard from "@/components/map-card"
 
 export default function Page() {
   const cards = [
@@ -47,9 +42,7 @@ export default function Page() {
               </div>
               <SectionCards cards={cards} width={2}/>
               <div className="px-4 lg:px-6">
-                <ChartAreaInteractive />
               </div>
-              <DataTable data={data} />
             </div>
           </div>
         </div>
