@@ -1,127 +1,122 @@
-"use client";
+"use client"
 
-import { AppSidebar } from "@/components/app-sidebar";
-import { ChartAreaInteractive } from "@/components/chart-area-interactive";
-import { DataTable } from "@/components/data-table";
-import { SectionCards } from "@/components/section-cards";
-import { SiteHeader } from "@/components/site-header";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-
-import data from "./data.json";
-import MapCard from "@/components/map-card";
-import AiCard from "@/components/ai-card";
-import { RoommateDetail } from "@/components/roommate-detail";
-import { RoommateList } from "@/components/roommate-list";
-import { useState, useEffect } from "react";
-import { RoommateFilters } from "@/components/roommate-filters";
-import { Loader2 } from "lucide-react";
+import { AppSidebar } from "@/components/app-sidebar"
+import { SiteHeader } from "@/components/site-header"
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
+import AiCard from "@/components/ai-card"
+import { RoommateDetail } from "@/components/roommate-detail"
+import { RoommateList } from "@/components/roommate-list"
+import { useState, useEffect } from "react"
+import { RoommateFilters } from "@/components/roommate-filters"
+import { Loader2 } from "lucide-react"
 
 export default function Page() {
-  const [roommates, setRoommates] = useState([]);
-  const [filteredRoommates, setFilteredRoommates] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedRoommates, setSelectedRoommates] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [roommates, setRoommates] = useState([])
+  const [filteredRoommates, setFilteredRoommates] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [selectedRoommates, setSelectedRoommates] = useState(null)
+  const [currentPage, setCurrentPage] = useState(1)
   const [filters, setFilters] = useState({
-    minAge: 0,
-    maxAge: 10000,
+    minAge: 17,
+    maxAge: 30,
     major: "all",
     gender: "all",
-  });
+    classYear: "all",
+  })
 
-  const itemsPerPage = 8;
+  const itemsPerPage = 8
 
   useEffect(() => {
     const fetchRoommates = async () => {
-      setLoading(true);
+      setLoading(true)
       try {
-        const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+        const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || ""
         const roommatesResponse = await fetch(`${apiBaseUrl}/api/students`, {
           credentials: "include",
-        });
+        })
 
         if (!roommatesResponse.ok) {
-          throw new Error("Failed to fetch roommate data");
+          throw new Error("Failed to fetch roommate data")
         }
 
-        const roommateData = await roommatesResponse.json();
+        const roommateData = await roommatesResponse.json()
 
-        const allRoommates = [...roommateData];
-        setRoommates(allRoommates);
-        setFilteredRoommates(allRoommates);
+        const allRoommates = [...roommateData]
+        setRoommates(allRoommates)
+        setFilteredRoommates(allRoommates)
       } catch (error) {
-        console.error("Error fetching roommate data:", error);
+        console.error("Error fetching roommate data:", error)
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
+    }
 
-    fetchRoommates();
-  }, []);
+    fetchRoommates()
+  }, [])
 
   useEffect(() => {
     const applyFilters = async () => {
-      setLoading(true);
+      setLoading(true)
       try {
         // Build query string based on filters
-        const queryParams = new URLSearchParams();
+        const queryParams = new URLSearchParams()
 
-        if (filters.minAge > 0)
-          queryParams.append("minAge", filters.minAge.toString());
-        if (filters.maxAge < 10000)
-          queryParams.append("maxAge", filters.maxAge.toString());
-        if (filters.major !== "all") queryParams.append("major", filters.major);
-        if (filters.gender !== "all")
-          queryParams.append("gender", filters.gender);
+        if (filters.minAge > 0) queryParams.append("minAge", filters.minAge.toString())
+        if (filters.maxAge < 10000) queryParams.append("maxAge", filters.maxAge.toString())
+        if (filters.major !== "all") queryParams.append("major", filters.major)
+        if (filters.gender !== "all") queryParams.append("gender", filters.gender)
+        if (filters.classYear !== "all") queryParams.append("classYear", filters.classYear)
 
-        const response = await fetch(
-          `/api/students/filter?${queryParams.toString()}`
-        );
-        const data = await response.json();
+        const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || ""
+        const response = await fetch(`${apiBaseUrl}/api/students/filter?${queryParams.toString()}`, {
+          credentials: "include",
+        })
 
-        setFilteredRoommates(data);
-        setCurrentPage(1); // Reset to first page when filters change
+        if (!response.ok) {
+          throw new Error("Failed to filter students")
+        }
+
+        const data = await response.json()
+        setFilteredRoommates(data)
+        setCurrentPage(1) // Reset to first page when filters change
       } catch (error) {
-        console.error("Error applying filters:", error);
+        console.error("Error applying filters:", error)
         // Fallback to client-side filtering if API fails
         const filtered = roommates.filter((roommate) => {
           return (
             roommate.age >= filters.minAge &&
             roommate.age <= filters.maxAge &&
             (filters.major === "all" || roommate.major === filters.major) &&
-            (filters.gender === "all" || roommate.gender === filters.gender)
-          );
-        });
-        setFilteredRoommates(filtered);
+            (filters.gender === "all" || roommate.gender === filters.gender) &&
+            (filters.classYear === "all" || roommate.class_year === filters.classYear)
+          )
+        })
+        setFilteredRoommates(filtered)
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
+    }
 
     if (roommates.length > 0) {
-      applyFilters();
+      applyFilters()
     }
-  }, [filters, roommates]);
+  }, [filters, roommates])
 
   const handleFilterChange = (newFilters) => {
-    setFilters({ ...filters, ...newFilters });
-  };
+    setFilters({ ...filters, ...newFilters })
+  }
 
   const handleRoommateSelect = (r) => {
-    setSelectedRoommates(r);
-  };
+    setSelectedRoommates(r)
+  }
 
   const handleCloseDetail = () => {
-    setSelectedRoommates(null);
-  };
+    setSelectedRoommates(null)
+  }
 
   // Calculate pagination
-  const totalPages = Math.ceil(filteredRoommates.length / itemsPerPage);
-  const paginatedRoommates = filteredRoommates.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  const totalPages = Math.ceil(filteredRoommates.length / itemsPerPage)
+  const paginatedRoommates = filteredRoommates.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
 
   return (
     <SidebarProvider
@@ -134,16 +129,13 @@ export default function Page() {
       <SidebarInset>
         <SiteHeader>Roommates</SiteHeader>
         <div className="flex flex-1 flex-col">
-          <div className="@container/main flex flex-1 flex-col gap-2">
+          <div className="@container/main flexex flex-1 flex-col gap-2">
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
               <div className="px-4 lg:px-6">
                 <AiCard />
               </div>
               <div className="px-4 lg:px-6">
-                <RoommateFilters
-                  onFilterChange={handleFilterChange}
-                  filters={filters}
-                />
+                <RoommateFilters onFilterChange={handleFilterChange} filters={filters} />
               </div>
               <div className="px-4 lg:px-6">
                 {loading ? (
@@ -164,12 +156,8 @@ export default function Page() {
           </div>
         </div>
       </SidebarInset>
-      {selectedRoommates && (
-        <RoommateDetail
-          roommate={selectedRoommates}
-          onClose={handleCloseDetail}
-        />
-      )}
+      {selectedRoommates && <RoommateDetail roommate={selectedRoommates} onClose={handleCloseDetail} />}
     </SidebarProvider>
-  );
+  )
 }
+

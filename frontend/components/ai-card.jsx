@@ -1,92 +1,88 @@
-import { IconTrendingDown, IconTrendingUp } from "@tabler/icons-react";
+"use client"
 
-import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardAction,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import FaceCard from "./face-card";
-import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { useState } from "react"
+import { IconTrendingUp } from "@tabler/icons-react"
+import { motion, AnimatePresence } from "framer-motion"
+
+import { Card, CardAction, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import FaceCard from "./face-card"
+import { Button } from "@/components/ui/button"
+import { Loader2 } from "lucide-react"
 
 function AiCard() {
-  const [chosen, setChosen] = useState([]);
+  const [chosen, setChosen] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [isExpanded, setIsExpanded] = useState(false)
 
   const handleClick = async () => {
+    setIsLoading(true)
     try {
-      const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+      const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || ""
 
       const response = await fetch(`${apiBaseUrl}/api/user`, {
         credentials: "include",
-      });
+      })
       if (!response.ok) {
-        throw new Error("Failed to fetch user data");
+        throw new Error("Failed to fetch user data")
       }
-      const userData = await response.json();
+      const userData = await response.json()
 
-      const generation = await fetch(
-        `${apiBaseUrl}/api/students/${userData.ruid}/similar/3`,
-        {
-          // /{id}/similar/{limit}
-          credentials: "include",
-        }
-      );
+      const generation = await fetch(`${apiBaseUrl}/api/students/${userData.ruid}/similar/3`, {
+        credentials: "include",
+      })
 
       if (!generation.ok) {
-        throw new Error("Failed to fetch similar students");
+        throw new Error("Failed to fetch similar students")
       }
 
-      const genData = await generation.json();
-      console.log(genData);
-      setChosen(genData);
+      const genData = await generation.json()
+      setChosen(genData)
+      setIsExpanded(true)
     } catch (error) {
-      console.error("Error fetching AI data:", error);
+      console.error("Error fetching AI data:", error)
+    } finally {
+      setIsLoading(false)
     }
-  };
+  }
 
   return (
-    <Card key="AiCard" className="@container/card">
+    <Card key="AiCard" className="@container/card overflow-hidden">
       <CardHeader>
-        <CardTitle className="text-xl font-semibold tabular-nums @[250px]/card:text-2xl">
-          WeFittin?
-        </CardTitle>
+        <CardTitle className="text-xl font-semibold tabular-nums @[250px]/card:text-2xl">WeFittin?</CardTitle>
         <CardDescription>people WeThinkin you might like</CardDescription>
         <CardAction>
-          <Button onClick={handleClick}>
-            <IconTrendingUp />
+          <Button onClick={handleClick} disabled={isLoading} className="relative">
+            {isLoading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <IconTrendingUp className="mr-2" />}
             Generate
           </Button>
         </CardAction>
       </CardHeader>
-      <CardFooter className="flex flex-row gap-1.5 text-sm">
-        <div className="flex-grow">
-          {chosen[0] ? (
-            <FaceCard size={32} student={chosen[0]} />
-          ) : (
-            <FaceCard size={32} />
-          )}
-        </div>
-        <div className="flex-grow">
-          {chosen[1] ? (
-            <FaceCard size={32} student={chosen[1]} />
-          ) : (
-            <FaceCard size={32} />
-          )}
-        </div>
-        <div className="flex-grow">
-          {chosen[2] ? (
-            <FaceCard size={32} student={chosen[2]} />
-          ) : (
-            <FaceCard size={32} />
-          )}
-        </div>
-      </CardFooter>
+
+      <AnimatePresence>
+        {isExpanded && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <CardFooter className="flex flex-row gap-1.5 text-sm pb-4">
+              <div className="flex-grow">
+                {chosen[0] ? <FaceCard size={32} student={chosen[0]} /> : <FaceCard size={32} />}
+              </div>
+              <div className="flex-grow">
+                {chosen[1] ? <FaceCard size={32} student={chosen[1]} /> : <FaceCard size={32} />}
+              </div>
+              <div className="flex-grow">
+                {chosen[2] ? <FaceCard size={32} student={chosen[2]} /> : <FaceCard size={32} />}
+              </div>
+            </CardFooter>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </Card>
-  );
+  )
 }
 
-export default AiCard;
+export default AiCard
+

@@ -4,7 +4,9 @@ const nextConfig = {
   images: {
     domains: [
       'ruoncampus.rutgers.edu',
-      's3.amazonaws.com'
+      's3.amazonaws.com',
+      'theaggie.org',
+      'lh3.googleusercontent.com'
     ],
   },
   async rewrites() {
