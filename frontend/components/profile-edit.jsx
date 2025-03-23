@@ -12,144 +12,91 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-export function ProfileEdit() {
+export function ProfileEdit({ onSubmit }) {
+  const profile = [
+    {
+      id: "age",
+      required: true,
+    },
+    {
+      id: "gender",
+      required: true,
+    },
+    {
+      id: "class_year",
+      required: true,
+    },
+    {
+      id: "major",
+      required: true,
+    },
+    {
+      id: "about_me",
+      required: true,
+    },
+    {
+      id: "likes",
+      required: true,
+    },
+    {
+      id: "dislikes",
+      required: true,
+    },
+    {
+      id: "instagram_username",
+      required: false,
+    },
+    {
+      id: "linkedin_link",
+      required: false,
+    },
+    {
+      id: "housing_preference",
+      required: false,
+    },
+    {
+      id: "lottery_number",
+      required: false,
+    },
+    {
+      id: "seniority_points",
+      required: false,
+    },
+    {
+      id: "image",
+      required: false,
+    },
+  ];
+
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">Edit Profile</Button>
+        <Button>Edit Profile</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Edit profile</DialogTitle>
-          <DialogDescription>
-            Make changes to your profile here. Click save when you're done.
-          </DialogDescription>
-        </DialogHeader>
-        <ScrollArea className="h-72 w-96 rounded-md">
-          <div className="grid gap-4 py-4">
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="m@example.com"
-                required
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="m@example.com"
-                required
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="m@example.com"
-                required
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="m@example.com"
-                required
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="m@example.com"
-                required
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="m@example.com"
-                required
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="m@example.com"
-                required
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="m@example.com"
-                required
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="m@example.com"
-                required
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="m@example.com"
-                required
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="m@example.com"
-                required
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="m@example.com"
-                required
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="m@example.com"
-                required
-              />
-            </div>
-          </div>
-        </ScrollArea>
 
-        <DialogFooter>
-          <Button type="submit">Save changes</Button>
-        </DialogFooter>
+      <DialogContent className="flex flex-col xs:max-w-[425px] md:max-w-[625px] h-[625px]">
+        <form onSubmit={onSubmit}>
+          <DialogHeader>
+            <DialogTitle>Edit profile</DialogTitle>
+            <DialogDescription>
+              Make changes to your profile here. Click save when you're done.
+            </DialogDescription>
+          </DialogHeader>
+          <ScrollArea className="h-[400px] overflow-y-auto rounded-md">
+            <div className="grid gap-4 py-4">
+              {profile.map((field) => (
+                <div className="grid gap-2" key={field.id}>
+                  <Label htmlFor={field.id}>{field.id}</Label>
+                  <Input id={field.id} type="text" placeholder="yessir" />
+                </div>
+              ))}
+            </div>
+          </ScrollArea>
+
+          <DialogFooter>
+            <Button type="submit">Save changes</Button>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );
