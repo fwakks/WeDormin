@@ -33,7 +33,6 @@ export default function HousingPage() {
       setLoading(true)
       try {
         const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || '';
-        console.log("Fetching from:", `${apiBaseUrl}/api/housing/oncampus`);
         const onCampusResponse = await fetch(`${apiBaseUrl}/api/housing/oncampus`, {
           credentials: 'include'
         })
@@ -76,7 +75,9 @@ export default function HousingPage() {
         queryParams.append("availability", filters.availability.toString())
 
         const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || '';
-        const response = await fetch(`${apiBaseUrl}/api/housing/filter?${queryParams.toString()}`)
+        const response = await fetch(`${apiBaseUrl}/api/housing/filter?${queryParams.toString()}`, {
+          credentials: 'include'
+        })
         const data = await response.json()
 
         setFilteredHousing(data)
