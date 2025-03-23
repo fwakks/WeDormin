@@ -6,12 +6,14 @@ import { LoginForm } from "@/components/login-form";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
+  
   const router = useRouter();
   const handleSubmit = (event) => {
     event.preventDefault();
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
     router.push(`${baseUrl}/oauth2/authorization/google`);
   };
+
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="flex flex-col gap-4 p-6 md:p-10">
@@ -31,7 +33,7 @@ export default function LoginPage() {
       </div>
       <div className="bg-muted relative hidden lg:block">
         <img
-          src="/placeholder.svg"
+          src="/dorm.jpg"
           alt="Image"
           className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
         />
