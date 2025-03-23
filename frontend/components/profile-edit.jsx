@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-export function ProfileEdit({ onSubmit, isModal = false }) {
+export function ProfileEdit({ onSubmit, isModal = false, userData = {} }) {
   const profile = [
     { id: "age", required: true },
     { id: "gender", required: true },
@@ -30,16 +30,16 @@ export function ProfileEdit({ onSubmit, isModal = false }) {
             {profile.map((field) => (
               <div className="grid gap-2" key={field.id}>
                 <Label htmlFor={field.id}>
-                {field.id} {field.required && <span style={{ color: 'red' }}>*</span>}
-                  </Label>
+                {field.id.replace('_', ' ').charAt(0).toUpperCase() + field.id.replace('_', ' ').slice(1)} {field.required && <span style={{ color: 'red' }}>*</span>}
+                </Label>
                 <Input 
-                id={field.id} 
-                type="text" 
-                placeholder="Enter here..."
-                required = {field.required}
-                name = {field.id}
-                  />
-                
+                  id={field.id} 
+                  type="text" 
+                  placeholder="Enter here..."
+                  required={field.required}
+                  name={field.id}
+                  defaultValue={userData[field.id] || ''}
+                />
               </div>
             ))}
           </div>
@@ -72,13 +72,15 @@ export function ProfileEdit({ onSubmit, isModal = false }) {
                 {profile.map((field) => (
                   <div className="grid gap-2" key={field.id}>
                     <Label htmlFor={field.id}>
-                    {field.id} {field.required && <span style={{ color: 'red' }}>*</span>}
-                      </Label>
+                    {field.id.replace('_', ' ').charAt(0).toUpperCase() + field.id.replace('_', ' ').slice(1)} {field.required && <span style={{ color: 'red' }}>*</span>}
+                    </Label>
                     <Input 
-                    id={field.id} 
-                    type="text" 
-                    placeholder="Enter here..." 
-                    required = {field.required}
+                      id={field.id} 
+                      type="text" 
+                      placeholder="Enter here..." 
+                      required={field.required}
+                      name={field.id}
+                      defaultValue={userData[field.id] || ''}
                     />
                   </div>
                 ))}

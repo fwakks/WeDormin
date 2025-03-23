@@ -1,18 +1,43 @@
 package com.wedormin.wedormin_backend.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import org.springframework.beans.factory.annotation.Value;
+
 @Configuration
-public class WebConfig implements WebMvcConfigurer{
+public class WebConfig implements WebMvcConfigurer {
+
+    @Value("${frontend.url}")
+    private String frontendUrl;
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-            .allowedOrigins("http://localhost:3000", "https://wedormin-1.onrender.com","https://wedormin-nsh5.onrender.com") // Frontend URL
-            .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
-            .allowCredentials(true)
-            .maxAge(3600);
+                .allowedOrigins(frontendUrl)
+                .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
+                .allowedHeaders("*")
+                .allowCredentials(true);
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        
+        config.addAllowedOrigin(frontendUrl);
+        config.addAllowedMethod("*");
+        config.addAllowedHeader("*");
+        config.setAllowCredentials(true);
+        
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
     }
 }
+
+// "https://wedormin-1.onrender.com","https://wedormin-nsh5.onrender.com"

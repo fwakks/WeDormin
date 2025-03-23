@@ -53,10 +53,11 @@ public class StudentController {
         }
 
         Student student = optionalStudent.get();
+        
         updates.forEach((key, value) -> {
             switch (key) {
                 case "age":
-                    student.setAge((Integer) value);
+                    student.setAge(value instanceof Integer ? (Integer) value : Integer.parseInt(value.toString()));
                     break;
                 case "gender":
                     student.setGender((String) value);
@@ -86,20 +87,17 @@ public class StudentController {
                     student.setHousing_preference((String) value);
                     break;
                 case "lottery_number":
-                    student.setLottery_number((Integer) value);
+                    student.setLottery_number(value instanceof Integer ? (Integer) value : Integer.parseInt(value.toString()));
                     break;
                 case "seniority_points":
-                    student.setSeniority_points((Integer) value);
+                    student.setSeniority_points(value instanceof Integer ? (Integer) value : Integer.parseInt(value.toString()));
                     break;
                 case "image":
                     student.setImage((String) value);
                     break;
-                default:
-                    throw new IllegalArgumentException("Invalid field: " + key);
             }
         });
-
-        student.setEmbedding(embeddingService.generateVector(student));
+        
         Student updatedStudent = studentRepository.save(student);
         return ResponseEntity.ok(updatedStudent);
     }

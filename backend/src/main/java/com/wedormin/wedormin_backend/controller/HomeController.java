@@ -79,18 +79,17 @@ public class HomeController {
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         String email = oAuth2User.getAttribute("email");
         String name = oAuth2User.getAttribute("name");
-        String oauthId = oAuth2User.getAttribute("sub");  // Get the OAuth ID
+        String oauthId = oAuth2User.getAttribute("sub");
         String googleProfileImage = oAuth2User.getAttribute("picture");
-        System.out.println("Saving student with image: " + googleProfileImage);
-
+        
         logger.info("OAuth Login - Name: {}, Email: {}, OAuth ID: {}, Profile Image: {}", 
-                     name, email, oauthId, googleProfileImage);
+                    name, email, oauthId, googleProfileImage);
 
         // Check if user already exists
         Optional<Student> existingStudent = studentRepository.findByOauthId(oauthId);
         if (existingStudent.isPresent()) {
             logger.info("User already exists: {}", existingStudent.get().getEmail());
-            return ResponseEntity.status(302).header("Location", frontendUrl + "/dashboard").build();
+            return ResponseEntity.ok().build(); // Return OK instead of redirect
         }
 
         // User doesn't exist, create a new student
@@ -100,16 +99,13 @@ public class HomeController {
         newStudent.setOauthId(oauthId);
         newStudent.setImage(googleProfileImage);
 
-        // Debugging: Log the new student details before saving
         logger.info("Saving new user: {}", newStudent);
-
-        // Save the new student
         studentRepository.save(newStudent);
 
         logger.info("New user registered successfully with image: {}", newStudent.getImage());
-
-        // Redirect to dashboard or profile completion page
-        return ResponseEntity.ok(newStudent);
+        
+        // Return OK status instead of trying to redirect
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/api/user")
