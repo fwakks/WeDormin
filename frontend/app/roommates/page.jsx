@@ -41,7 +41,8 @@ export default function Page() {
     const fetchRoommates = async () => {
       setLoading(true);
       try {
-        const roommatesResponse = await fetch("/api/students", {
+        const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || '';
+        const roommatesResponse = await fetch(`${apiBaseUrl}/api/students`, {
           credentials: "include",
         });
 
