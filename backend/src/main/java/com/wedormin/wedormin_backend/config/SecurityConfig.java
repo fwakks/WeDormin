@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 
 @Configuration
 @EnableWebSecurity
@@ -19,15 +20,15 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/").permitAll();
-                    auth.requestMatchers("/api/public/**").permitAll();
-                    auth.requestMatchers("/dashboard", "/profile/**").authenticated();
+                    auth.requestMatchers("/", "/ws/**").permitAll(); // Allow WebSocket connections
+                    auth.requestMatchers("/register").authenticated();
                     auth.anyRequest().authenticated();
                 })
                 .oauth2Login(oauth2 -> oauth2
+                        .userInfoEndpoint(userInfo -> userInfo.oidcUserService(new OidcUserService()))
                         .successHandler(customOAuth2SuccessHandler)
                 )
-                .csrf(csrf -> csrf.disable())
+                .csrf(csrf -> csrf.disable()) // WebSockets won't work with CSRF enabled
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/")
