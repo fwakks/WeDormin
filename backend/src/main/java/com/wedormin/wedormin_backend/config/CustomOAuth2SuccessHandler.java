@@ -15,6 +15,8 @@ import org.springframework.stereotype.Component;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
 import java.io.IOException;
 
 @Component
@@ -40,17 +42,8 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
             // User exists - redirect to dashboard or appropriate page
             getRedirectStrategy().sendRedirect(request, response, frontendUrl + "/dashboard");
         } else {
-            // First-time user - create a basic profile
-            Student newStudent = new Student();
-            newStudent.setName(name);
-            newStudent.setEmail(email);
-            newStudent.setOauthId(oauthId);
-            
-            // Save the student with basic info
-            studentRepository.save(newStudent);
-            
-            // Redirect to profile completion page
-            getRedirectStrategy().sendRedirect(request, response, frontendUrl + "/dashboard");
+            getRedirectStrategy().sendRedirect(request, response, frontendUrl + "/register");
         }
     }
 }
+

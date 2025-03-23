@@ -57,6 +57,23 @@ public class HomeController {
         return "profile-edit";
     }
 
+    @GetMapping ("/register-student")
+    public ResponseEntity<Student> getOauth(HttpSession session, Authentication authentication) {
+        OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
+        String email = oAuth2User.getAttribute("email");
+        String name = oAuth2User.getAttribute("name");
+        String oauthId = oAuth2User.getAttribute("sub");  // Get the OAuth ID
+        System.out.println("WAAA " + email + " " + name + " " + oauthId);
+        
+        // User doesn't exist, create a new student
+        Student newStudent = new Student();
+        newStudent.setName(name);
+        newStudent.setEmail(email);
+        newStudent.setOauthId(oauthId);
+       
+        return ResponseEntity.ok(newStudent);
+    }
+
     @GetMapping("/register")
     public ResponseEntity<?> showRegistrationForm(HttpSession session, Authentication authentication) {
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
@@ -92,7 +109,7 @@ public class HomeController {
         logger.info("New user registered successfully with image: {}", newStudent.getImage());
 
         // Redirect to dashboard or profile completion page
-        return ResponseEntity.status(302).header("Location", frontendUrl + "/dashboard").build();
+        return ResponseEntity.ok(newStudent);
     }
 
     @GetMapping("/api/user")
