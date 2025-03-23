@@ -1,1 +1,1 @@
-web: java -jar target/wedormin-backend-0.0.1-SNAPSHOT.jar
+web: java -jar src/target/wedormin-backend-0.0.1-SNAPSHOT.jar
