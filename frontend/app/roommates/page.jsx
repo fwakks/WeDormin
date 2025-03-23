@@ -17,12 +17,6 @@ import { RoommateFilters } from "@/components/roommate-filters";
 import { Loader2 } from "lucide-react";
 
 export default function Page() {
-  const cards = [
-    {
-      title: "WeFittin?",
-      value: "YESSIR",
-    },
-  ];
   const [roommates, setRoommates] = useState([]);
   const [filteredRoommates, setFilteredRoommates] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -41,7 +35,7 @@ export default function Page() {
     const fetchRoommates = async () => {
       setLoading(true);
       try {
-        const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || '';
+        const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
         const roommatesResponse = await fetch(`${apiBaseUrl}/api/students`, {
           credentials: "include",
         });
@@ -142,7 +136,7 @@ export default function Page() {
           <div className="@container/main flex flex-1 flex-col gap-2">
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
               <div className="px-4 lg:px-6">
-                <AiCard cards={cards}></AiCard>
+                <AiCard />
               </div>
               <div className="px-4 lg:px-6">
                 <RoommateFilters
@@ -165,11 +159,6 @@ export default function Page() {
                   />
                 )}
               </div>
-              <SectionCards cards={cards} width={1} />
-              <div className="px-4 lg:px-6">
-                <ChartAreaInteractive />
-              </div>
-              <DataTable data={data} />
             </div>
           </div>
         </div>
