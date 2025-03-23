@@ -10,7 +10,7 @@ public class WebConfig implements WebMvcConfigurer{
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-            .allowedOrigins("http://localhost:3000", "https://wedormin-1.onrender.com") // Frontend URL
+            .allowedOrigins("http://localhost:3000", "https://wedormin-1.onrender.com","https://wedormin-nsh5.onrender.com") // Frontend URL
             .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
             .allowCredentials(true)
             .maxAge(3600);

@@ -1,3 +1,5 @@
+"use client";
+
 import { AppSidebar } from "@/components/app-sidebar";
 import { ChartAreaInteractive } from "@/components/chart-area-interactive";
 import { DataTable } from "@/components/data-table";
@@ -13,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import ProfileTab from "@/components/profile-tab";
 import ProfileList from "@/components/profile-list";
 import ProfileEdit from "@/components/profile-edit";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
   const cards = [
@@ -25,6 +28,12 @@ export default function Page() {
       value: "YESSIR",
     },
   ];
+  const router = useRouter();
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    router.push("/dashboard");
+  };
+
   return (
     <SidebarProvider
       style={{
@@ -47,8 +56,7 @@ export default function Page() {
               </div>
               <ProfileList></ProfileList>
               <div className="flex justify-center px-4 lg:px-6">
-                <Button>Edit</Button>
-                <ProfileEdit></ProfileEdit>
+                <ProfileEdit onSubmit={handleSubmit}></ProfileEdit>
               </div>
             </div>
           </div>
