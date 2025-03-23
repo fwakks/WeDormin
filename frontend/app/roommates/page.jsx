@@ -11,6 +11,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import data from "./data.json";
 import MapCard from "@/components/map-card";
 import AiCard from "@/components/ai-card";
+import { RoommateDetail } from "@/components/roommate-detail";
 import { RoommateList } from "@/components/roommate-list";
 import { useState, useEffect } from "react";
 import { RoommateFilters } from "@/components/roommate-filters";
@@ -108,7 +109,7 @@ export default function Page() {
   };
 
   const handleRoommateSelect = (r) => {
-    setSelectedHousing(r);
+    setSelectedRoommates(r);
   };
 
   const handleCloseDetail = () => {
@@ -163,6 +164,12 @@ export default function Page() {
           </div>
         </div>
       </SidebarInset>
+      {selectedRoommates && (
+        <RoommateDetail
+          roommate={selectedRoommates}
+          onClose={handleCloseDetail}
+        />
+      )}
     </SidebarProvider>
   );
 }
