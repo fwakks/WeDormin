@@ -71,7 +71,7 @@ export default function HousingPage() {
         if (filters.campus !== "all") queryParams.append("campus", filters.campus)
         queryParams.append("availability", filters.availability.toString())
 
-        const response = await fetch(`http://localhost:8080/api/housing/filter?${queryParams.toString()}`)
+        const response = await fetch(`/api/housing/filter?${queryParams.toString()}`)
         const data = await response.json()
 
         setFilteredHousing(data)

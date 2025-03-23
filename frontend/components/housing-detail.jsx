@@ -34,7 +34,7 @@ export function HousingDetail({ housing, onClose }) {
   const getAmenityIcon = (amenity) => {
     const lowerAmenity = amenity.toLowerCase()
 
-    if (lowerAmenity.includes("wifi")) return <Wifi className="h-4 w-4" />
+    if (lowerAmenity.includes("wifi")) return <Wifi className="h-5 w-5" />
     if (lowerAmenity.includes("laundry")) return <Shirt className="h-4 w-4" />
     if (lowerAmenity.includes("kitchen") || lowerAmenity.includes("dishwasher")) return <Utensils className="h-4 w-4" />
     if (lowerAmenity.includes("air") || lowerAmenity.includes("heat")) return <Thermometer className="h-4 w-4" />
@@ -118,7 +118,12 @@ export function HousingDetail({ housing, onClose }) {
             {housing.min_class_year && (
               <div className="mt-4">
                 <h4 className="font-medium mb-1">Eligibility</h4>
-                <p>{housing.min_class_year} and above</p>
+                <p>
+                  {housing.min_class_year === "All" && "Open to all students"}
+                  {housing.min_class_year === "Freshman" && "Freshmen only"}
+                  {housing.min_class_year === "Sophomore" && "Sophomores and above"}
+                  {housing.min_class_year === "Graduate" && "Graduate students only"}
+                </p>
               </div>
             )}
 

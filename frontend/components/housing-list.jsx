@@ -109,7 +109,8 @@ export function HousingList({ housing, onSelect, currentPage, totalPages, onPage
                 <div>
                   <p className="font-medium text-lg">{formatCurrency(house.price)}</p>
                   <p className="text-sm text-muted-foreground">
-                    {house.location_type === "on_campus" ? "per semester" : "per month"}
+                    {house.name === "Marvin Apartments" ? "per month" : 
+                      house.location_type === "on_campus" ? "per year" : "per month"}
                   </p>
                 </div>
                 <div className="text-right">

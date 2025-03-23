@@ -12,6 +12,7 @@ import { FilterX, Search } from "lucide-react"
 export function HousingFilters({ onFilterChange, filters }) {
   const [priceRange, setPriceRange] = useState([filters.minPrice, filters.maxPrice])
   const [locationType, setLocationType] = useState(filters.locationType)
+  const [housingType, setHousingType] = useState(filters.housingType || "all")
   const [campus, setCampus] = useState(filters.campus)
   const [availability, setAvailability] = useState(filters.availability)
 
@@ -24,6 +25,10 @@ export function HousingFilters({ onFilterChange, filters }) {
 
   const handleLocationTypeChange = (value) => {
     setLocationType(value)
+  }
+  
+  const handleHousingTypeChange = (value) => {
+    setHousingType(value)
   }
 
   const handleCampusChange = (value) => {
@@ -39,6 +44,7 @@ export function HousingFilters({ onFilterChange, filters }) {
       minPrice: priceRange[0],
       maxPrice: priceRange[1],
       locationType,
+      housingType,
       campus,
       availability,
     })
@@ -47,6 +53,7 @@ export function HousingFilters({ onFilterChange, filters }) {
   const resetFilters = () => {
     setPriceRange([0, 10000])
     setLocationType("all")
+    setHousingType("all")
     setCampus("all")
     setAvailability(true)
 
@@ -54,6 +61,7 @@ export function HousingFilters({ onFilterChange, filters }) {
       minPrice: 0,
       maxPrice: 10000,
       locationType: "all",
+      housingType: "all",
       campus: "all",
       availability: true,
     })
@@ -65,7 +73,7 @@ export function HousingFilters({ onFilterChange, filters }) {
         <CardTitle className="text-xl">Filter Housing Options</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
           <div className="space-y-2">
             <Label>
               Price Range (${priceRange[0]} - ${priceRange[1]})
@@ -91,6 +99,21 @@ export function HousingFilters({ onFilterChange, filters }) {
                 <SelectItem value="all">All Locations</SelectItem>
                 <SelectItem value="on_campus">On Campus</SelectItem>
                 <SelectItem value="off_campus">Off Campus</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div className="space-y-2">
+            <Label>Housing Type</Label>
+            <Select value={housingType} onValueChange={handleHousingTypeChange}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select housing type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Types</SelectItem>
+                <SelectItem value="Traditional">Traditional</SelectItem>
+                <SelectItem value="Suite">Suite</SelectItem>
+                <SelectItem value="Apartment">Apartment</SelectItem>
               </SelectContent>
             </Select>
           </div>
