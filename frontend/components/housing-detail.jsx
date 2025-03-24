@@ -35,14 +35,20 @@ export function HousingDetail({ housing, onClose }) {
 
   const getAmenityIcon = (amenity) => {
     const lowerAmenity = amenity.toLowerCase()
-
-    if (lowerAmenity.includes("wifi")) return <Wifi className="h-5 w-5" />
-    if (lowerAmenity.includes("laundry")) return <Shirt className="h-4 w-4" />
-    if (lowerAmenity.includes("kitchen") || lowerAmenity.includes("dishwasher")) return <Utensils className="h-4 w-4" />
-    if (lowerAmenity.includes("air") || lowerAmenity.includes("heat")) return <Thermometer className="h-4 w-4" />
-    if (lowerAmenity.includes("water") || lowerAmenity.includes("bath")) return <Droplets className="h-4 w-4" />
-
-    return <Check className="h-4 w-4" />
+  
+    let icon;
+    if (lowerAmenity.includes("wifi")) icon = <Wifi />
+    else if (lowerAmenity.includes("laundry")) icon = <Shirt />
+    else if (lowerAmenity.includes("kitchen") || lowerAmenity.includes("dishwasher")) icon = <Utensils />
+    else if (lowerAmenity.includes("air") || lowerAmenity.includes("heat")) icon = <Thermometer />
+    else if (lowerAmenity.includes("water") || lowerAmenity.includes("bath")) icon = <Droplets />
+    else icon = <Check />
+  
+    return (
+      <div className="flex items-center justify-center w-4 h-4 shrink-0">
+        {icon}
+      </div>
+    )
   }
 
   return (
@@ -185,7 +191,7 @@ export function HousingDetail({ housing, onClose }) {
               {amenitiesList.map((amenity, index) => (
                 <div key={index} className="flex items-center gap-2">
                   {getAmenityIcon(amenity)}
-                  <span>{amenity}</span>
+                  <span className="text-sm">{amenity}</span>
                 </div>
               ))}
             </div>
