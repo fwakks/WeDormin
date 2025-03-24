@@ -6,7 +6,8 @@ const nextConfig = {
       'ruoncampus.rutgers.edu',
       's3.amazonaws.com',
       'theaggie.org',
-      'lh3.googleusercontent.com'
+      'lh3.googleusercontent.com',
+      'thispersondoesnotexist.com'
     ],
   },
   async rewrites() {
