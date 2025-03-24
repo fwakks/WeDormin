@@ -1,20 +1,11 @@
 "use client";
 
 import { AppSidebar } from "@/components/app-sidebar";
-import { ChartAreaInteractive } from "@/components/chart-area-interactive";
-import { DataTable } from "@/components/data-table";
-import { SectionCards } from "@/components/section-cards";
 import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { useState, useEffect } from "react";
 
-
-import data from "../dashboard/data.json";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Card } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import ProfileTab from "@/components/profile-tab";
 import ProfileList from "@/components/profile-list";
 import ProfileEdit from "@/components/profile-edit";
 import { useRouter } from "next/navigation";
@@ -63,14 +54,14 @@ export default function Page() {
       setError("User data not available. Please try logging in again.");
       return;
     }
-
+  
     setIsLoading(true);
     setError(null);
-
+  
     // Collect form data
     const formData = new FormData(event.target);
     const updates = {};
-
+  
     formData.forEach((value, key) => {
       if (value) {
         // Convert numeric string values to numbers where needed
@@ -81,7 +72,7 @@ export default function Page() {
         }
       }
     });
-
+  
     console.log("Updating user with data:", JSON.stringify(updates));
     
     try {
@@ -94,14 +85,20 @@ export default function Page() {
         credentials: "include",
         body: JSON.stringify(updates),
       });
-
+  
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`Failed to update profile: ${errorText}`);
       }
-
-      // Redirect to dashboard after successful update
-      router.push("/profile");
+  
+      // Update the local userData state with the new values
+      setUserData(prevData => ({
+        ...prevData,
+        ...updates
+      }));
+  
+      // Close the dialog if using modal version (optional)
+      // You can add a state to control the dialog if needed
     } catch (err) {
       console.error("Update error:", err);
       setError(err.message);
