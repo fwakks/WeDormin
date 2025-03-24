@@ -8,7 +8,7 @@ function FaceCard({ size, student = { name: "John Doe", about_me: "A female deer
     <Card className="@container/card gap-4 transition-all hover:shadow-md">
       <CardHeader className="flex flex-col items-center gap-2">
         <Avatar className={`h-${size} w-${size} rounded-lg`}>
-          <AvatarImage src={student.image} alt={student.name} />
+          <AvatarImage src={student.image} alt={student.name} className="object-contain" />
           <AvatarFallback>{student.name?.charAt(0) || "?"}</AvatarFallback>
         </Avatar>
         <div className="flex flex-col items-center">
