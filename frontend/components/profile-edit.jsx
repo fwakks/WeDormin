@@ -77,7 +77,7 @@ export function ProfileEdit({ onSubmit, isModal = false, userData = {} }) {
                     <Input 
                       id={field.id} 
                       type="text" 
-                      placeholder="Enter here..." 
+                      placeholder={userData[field.id] || ''}
                       required={field.required}
                       name={field.id}
                       defaultValue={userData[field.id] || ''}
