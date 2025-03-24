@@ -24,20 +24,37 @@ export function SectionCards({ cards, width }) {
             <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
               {card.value}
             </CardTitle>
-            <CardAction>
-              <Badge variant="outline">
-                <IconTrendingUp />
-                +12.5%
-              </Badge>
-            </CardAction>
           </CardHeader>
           <CardFooter className="flex-col items-start gap-1.5 text-sm">
-            <div className="line-clamp-1 flex gap-2 font-medium">
-              Trending up this month <IconTrendingUp className="size-4" />
-            </div>
-            <div className="text-muted-foreground">
-              Visitors for the last 6 months
-            </div>
+            {card.title === "Roommate" ? (
+              <>
+                <div className="line-clamp-1 flex gap-2 font-medium">
+                  Contact information available
+                </div>
+                <div className="text-muted-foreground">
+                  Click for more details
+                </div>
+              </>
+            ) : card.title === "Dorm" ? (
+              <>
+                <div className="line-clamp-1 flex gap-2 font-medium">
+                  Housing assignment for Spring 2025
+                </div>
+                <div className="text-muted-foreground">
+                  View building information
+                </div>
+              </>
+            ) : (
+              // Default footer
+              <>
+                <div className="line-clamp-1 flex gap-2 font-medium">
+                  Trending up this month <IconTrendingUp className="size-4" />
+                </div>
+                <div className="text-muted-foreground">
+                  Visitors for the last 6 months
+                </div>
+              </>
+            )}
           </CardFooter>
         </Card>
       ))}

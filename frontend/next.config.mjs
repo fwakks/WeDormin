@@ -7,7 +7,8 @@ const nextConfig = {
       's3.amazonaws.com',
       'theaggie.org',
       'lh3.googleusercontent.com',
-      'thispersondoesnotexist.com'
+      'thispersondoesnotexist.com',
+      'images.pexels.com'
     ],
   },
   async rewrites() {

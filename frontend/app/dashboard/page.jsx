@@ -15,12 +15,12 @@ export default function Page() {
 
   const cards = [
     {
-      title: "Roommates",
-      value: "YESSIR"
+      title: "Roommate",
+      value: "John Smith"
     },
     {
       title: "Dorm",
-      value: "YESSIR"
+      value: "Thomas Suites"
     }
   ];
 
