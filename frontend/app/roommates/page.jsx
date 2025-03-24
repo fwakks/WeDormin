@@ -22,6 +22,7 @@ export default function Page() {
     major: "all",
     gender: "all",
     classYear: "all",
+    searchTerm: "",
   })
 
   const itemsPerPage = 8
@@ -66,6 +67,7 @@ export default function Page() {
         if (filters.major !== "all") queryParams.append("major", filters.major)
         if (filters.gender !== "all") queryParams.append("gender", filters.gender)
         if (filters.classYear !== "all") queryParams.append("classYear", filters.classYear)
+        if (filters.searchTerm) queryParams.append("name", filters.searchTerm)
 
         const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || ""
         const response = await fetch(`${apiBaseUrl}/api/students/filter?${queryParams.toString()}`, {
@@ -83,7 +85,11 @@ export default function Page() {
         console.error("Error applying filters:", error)
         // Fallback to client-side filtering if API fails
         const filtered = roommates.filter((roommate) => {
+          const nameMatch =
+            !filters.searchTerm || roommate.name.toLowerCase().includes(filters.searchTerm.toLowerCase())
+
           return (
+            nameMatch &&
             roommate.age >= filters.minAge &&
             roommate.age <= filters.maxAge &&
             (filters.major === "all" || roommate.major === filters.major) &&
@@ -97,8 +103,42 @@ export default function Page() {
       }
     }
 
+    const searchStudents = async (searchTerm) => {
+      if (!searchTerm) {
+        // If search term is empty, just apply regular filters
+        return
+      }
+
+      setLoading(true)
+      try {
+        const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || ""
+        const response = await fetch(`${apiBaseUrl}/api/students/search?name=${encodeURIComponent(searchTerm)}`, {
+          credentials: "include",
+        })
+
+        if (!response.ok) {
+          throw new Error("Failed to search students")
+        }
+
+        const data = await response.json()
+        setFilteredRoommates(data)
+        setCurrentPage(1) // Reset to first page when search changes
+      } catch (error) {
+        console.error("Error searching students:", error)
+        // Fallback to client-side filtering
+        const filtered = roommates.filter((roommate) => roommate.name.toLowerCase().includes(searchTerm.toLowerCase()))
+        setFilteredRoommates(filtered)
+      } finally {
+        setLoading(false)
+      }
+    }
+
     if (roommates.length > 0) {
-      applyFilters()
+      if (filters.searchTerm) {
+        searchStudents(filters.searchTerm)
+      } else {
+        applyFilters()
+      }
     }
   }, [filters, roommates])
 

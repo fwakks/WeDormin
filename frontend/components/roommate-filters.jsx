@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Slider } from "@/components/ui/slider"
@@ -13,6 +13,9 @@ export function RoommateFilters({ onFilterChange, filters }) {
   const [major, setMajor] = useState(filters.major || "all")
   const [gender, setGender] = useState(filters.gender || "all")
   const [classYear, setClassYear] = useState(filters.classYear || "all")
+  const [searchTerm, setSearchTerm] = useState("")
+
+  const searchTimeout = useRef(null)
 
   // List of majors for the dropdown
   const majors = ["all", "Computer Science", "Business", "Engineering", "Arts", "Medicine", "Law"]
@@ -39,6 +42,22 @@ export function RoommateFilters({ onFilterChange, filters }) {
     setClassYear(value)
   }
 
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value)
+
+    // Debounce the search to avoid too many API calls
+    if (searchTimeout.current) {
+      clearTimeout(searchTimeout.current)
+    }
+
+    searchTimeout.current = setTimeout(() => {
+      onFilterChange({
+        ...filters,
+        searchTerm: e.target.value,
+      })
+    }, 300)
+  }
+
   const applyFilters = () => {
     onFilterChange({
       minAge: ageRange[0],
@@ -46,6 +65,7 @@ export function RoommateFilters({ onFilterChange, filters }) {
       major,
       gender,
       classYear,
+      searchTerm,
     })
   }
 
@@ -54,6 +74,7 @@ export function RoommateFilters({ onFilterChange, filters }) {
     setMajor("all")
     setGender("all")
     setClassYear("all")
+    setSearchTerm("")
 
     onFilterChange({
       minAge: 17,
@@ -61,6 +82,7 @@ export function RoommateFilters({ onFilterChange, filters }) {
       major: "all",
       gender: "all",
       classYear: "all",
+      searchTerm: "",
     })
   }
 
@@ -73,6 +95,23 @@ export function RoommateFilters({ onFilterChange, filters }) {
         </CardTitle>
       </CardHeader>
       <CardContent>
+        <div className="mb-6">
+          <Label className="flex items-center text-sm font-medium mb-2">
+            <Search className="mr-2 h-4 w-4 text-primary" />
+            Search by Name
+          </Label>
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <input
+              type="text"
+              placeholder="Search roommates..."
+              value={searchTerm}
+              onChange={handleSearchChange}
+              className="w-full pl-10 py-2 rounded-md border border-input bg-background text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            />
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <div className="space-y-3">
             <Label className="flex items-center text-sm font-medium">
