@@ -126,6 +126,18 @@ public class HomeController {
         }
     }
 
+    @GetMapping("/api/profile")
+    public ResponseEntity<?> getUserProfile(@AuthenticationPrincipal OAuth2User principal) {
+        String oauthId = principal.getAttribute("sub"); // Assuming 'sub' is the OAuth ID
+        Optional<Student> studentOpt = studentRepository.findByOauthId(oauthId);
+        if (studentOpt.isPresent()) {
+            Student student = studentOpt.get();
+            return ResponseEntity.ok(student);
+        } else {
+            return ResponseEntity.status(404).body("User not found");
+        }
+    }
+
     // DTO class to send user details
     @Getter
     @Setter
