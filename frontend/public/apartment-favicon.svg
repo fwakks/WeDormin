@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Base line -->
+  <line x1="8" y1="56" x2="56" y2="56" stroke="#D32F2F" stroke-width="2"/>
+  
+  <!-- Left building -->
+  <polygon points="16,56 16,24 28,14 28,56" fill="#D32F2F"/>
+  <polygon points="28,14 28,56 34,56 34,22" fill="#F44336"/>
+  
+  <!-- Right building -->
+  <polygon points="34,56 34,26 46,20 46,56" fill="#D32F2F"/>
+  
+  <!-- Windows (simplified) -->
+  <rect x="19" y="28" width="6" height="2" fill="white"/>
+  <rect x="19" y="34" width="6" height="2" fill="white"/>
+  <rect x="19" y="40" width="6" height="2" fill="white"/>
+  <rect x="19" y="46" width="6" height="2" fill="white"/>
+  
+  <rect x="37" y="28" width="6" height="2" fill="white"/>
+  <rect x="37" y="34" width="6" height="2" fill="white"/>
+  <rect x="37" y="40" width="6" height="2" fill="white"/>
+  <rect x="37" y="46" width="6" height="2" fill="white"/>
+</svg>
