@@ -1,6 +1,6 @@
-# WeDormin
+# WeDormin?
 
-WeDormin is a comprehensive platform designed to simplify the housing process for college students, with a particular focus on Rutgers University students. The application helps users find both on-campus and off-campus housing options, evaluate their lottery chances, and connect with potential roommates based on preferences and compatibility.
+WeDormin? is a comprehensive platform designed to simplify the housing process for college students, with a particular focus on Rutgers University students. The application helps users find both on-campus and off-campus housing options, evaluate their lottery chances, and connect with potential roommates based on preferences and compatibility.
 
 ## Features
 
