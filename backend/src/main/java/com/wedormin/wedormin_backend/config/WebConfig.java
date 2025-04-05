@@ -20,7 +20,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins(frontendUrl)  // Use your frontend URL
+                .allowedOrigins(frontendUrl)  // Your frontend URL
                 .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);
@@ -31,7 +31,7 @@ public class WebConfig implements WebMvcConfigurer {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         
-        config.setAllowedOriginPatterns(List.of(frontendUrl));
+        config.setAllowedOrigins(List.of(frontendUrl));  // Use setAllowedOrigins instead of setAllowedOriginPatterns
         System.out.println("Allowed CORS origins: " + frontendUrl);
         config.addAllowedMethod("*");
         config.addAllowedHeader("*");
