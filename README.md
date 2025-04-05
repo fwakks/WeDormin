@@ -132,4 +132,4 @@ npm run dev
 - Enhanced AI-driven recommendations
 
 ## Project Context
-This project was developed as part of the Bank of America Code-a-thon, aiming to create innovative solutions to improve the college housing experience for Rutgers students. 
+This project was developed as part of the Bank of America Code-A-Thon, aiming to create innovative solutions to improve the college housing experience for Rutgers students. 
