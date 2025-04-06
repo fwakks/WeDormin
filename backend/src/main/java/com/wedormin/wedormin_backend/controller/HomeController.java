@@ -120,7 +120,10 @@ public class HomeController {
                 student.getName(), 
                 student.getEmail(), 
                 student.getLottery_number(), 
-                student.getImage()));
+                student.getImage(),
+                student.getChosen_housing_id(),
+                student.getChosen_student_id()
+            ));
         } else {
             return ResponseEntity.status(404).body("User not found");
         }
@@ -149,5 +152,7 @@ public class HomeController {
         private String email;
         private Integer lotteryNumber;
         private String image;
+        private Integer chosen_housing_id;
+        private Integer chosen_student_id;
     }
 }

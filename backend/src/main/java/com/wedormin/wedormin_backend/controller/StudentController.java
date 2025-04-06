@@ -95,6 +95,12 @@ public class StudentController {
                 case "image":
                     student.setImage((String) value);
                     break;
+                case "chosen_housing_id":
+                    student.setChosen_housing_id(value instanceof Integer ? (Integer) value : Integer.parseInt(value.toString()));
+                    break;
+                case "chosen_student_id":
+                    student.setChosen_student_id(value instanceof Integer ? (Integer) value : Integer.parseInt(value.toString()));
+                    break;
             }
         });
         

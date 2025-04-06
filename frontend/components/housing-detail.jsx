@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import {
   Dialog,
   DialogContent,
@@ -25,10 +26,14 @@ import {
   Droplets,
   Thermometer,
   Shirt,
+  Loader2,
 } from "lucide-react"
 import Image from "next/image"
 
-export function HousingDetail({ housing, onClose }) {
+export function HousingDetail({ housing, onClose, user }) {
+  const [isApplying, setIsApplying] = useState(false)
+  const [hasApplied, setHasApplied] = useState(false)
+  
   console.log("Housing data in detail component:", housing)
 
   const amenitiesList = housing.amenities.split(",").map((item) => item.trim())
@@ -49,6 +54,51 @@ export function HousingDetail({ housing, onClose }) {
         {icon}
       </div>
     )
+  }
+
+  const applyForHousing = async () => {
+    if (!user?.ruid) {
+      console.error("User not logged in or RUID not available")
+      return
+    }
+  
+    console.log("Applying for housing:", housing.housing_id, "User ID:", user.ruid);
+    setIsApplying(true)
+    
+    try {
+      const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || '';
+      console.log("Making PATCH request to:", `${apiBaseUrl}/api/students/${user.ruid}`);
+      
+      const response = await fetch(`${apiBaseUrl}/api/students/${user.ruid}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          chosen_housing_id: parseInt(housing.housing_id)
+        })
+      });
+  
+      console.log("Response status:", response.status);
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Error response:", errorText);
+        throw new Error(`Failed to apply for housing: ${response.status} ${errorText}`);
+      }
+  
+      const data = await response.json();
+      console.log("Successfully applied for housing:", data);
+      setHasApplied(true);
+    } catch (error) {
+      console.error("Error applying for housing:", error);
+    } finally {
+      // Always update state regardless of success or failure
+      if (!hasApplied) {
+        setIsApplying(false);
+      }
+    }
   }
 
   return (
@@ -204,10 +254,26 @@ export function HousingDetail({ housing, onClose }) {
           <Button variant="outline" onClick={onClose}>
             Close
           </Button>
-          <Button>Apply for Housing</Button>
+          <Button 
+            onClick={applyForHousing} 
+            disabled={isApplying || hasApplied || !user?.ruid}
+          >
+            {isApplying ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Applying...
+              </>
+            ) : hasApplied ? (
+              <>
+                <Check className="mr-2 h-4 w-4" />
+                Applied
+              </>
+            ) : (
+              "Apply for Housing"
+            )}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
   )
 }
-

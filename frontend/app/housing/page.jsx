@@ -229,7 +229,13 @@ export default function HousingPage() {
         </div>
       </SidebarInset>
 
-      {selectedHousing && <HousingDetail housing={selectedHousing} onClose={handleCloseDetail} />}
+      {selectedHousing && (
+        <HousingDetail 
+          housing={selectedHousing} 
+          onClose={handleCloseDetail} 
+          user={user} 
+        />
+      )}
     </SidebarProvider>
   )
 }
