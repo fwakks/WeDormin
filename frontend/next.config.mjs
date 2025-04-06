@@ -1,4 +1,3 @@
-// filepath: c:\Yash Dev\WeDormin\frontend\next.config.mjs
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {

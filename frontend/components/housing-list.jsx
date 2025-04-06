@@ -93,7 +93,7 @@ export function HousingList({ housing, onSelect, currentPage, totalPages, onPage
             onClick={() => onSelect(house)}
           >
             <div className="relative h-48 w-full">
-              <Image src={house.image || "/placeholder.svg"} alt={house.name} fill className="object-cover" />
+              <Image src={house.image || "/placeholder.svg"} alt={house.name} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="object-cover" />
               <Badge
                 className="absolute top-2 right-2"
                 variant={house.location_type === "on_campus" ? "default" : "secondary"}

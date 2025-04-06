@@ -1,213 +1,140 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
-import { Card } from "@/components/ui/card"
-import { Loader2 } from "lucide-react"
+import { useLoadScript, GoogleMap, MarkerF } from "@react-google-maps/api"
+import { useState, useEffect } from "react"
 
-export function HousingMap({ housing, onSelect }) {
-  const mapRef = useRef(null)
-  const [loading, setLoading] = useState(true)
-  const [mapLoaded, setMapLoaded] = useState(false)
-  const [map, setMap] = useState(null)
-  const [markers, setMarkers] = useState([])
+const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ""
 
-  useEffect(() => {
-    console.log("Housing data:", housing);
-  }, [housing]);
+// Styling to make the map container full width and height
+const mapContainerStyle = {
+  width: "100%",
+  height: "500px",
+  position: "relative" // Add relative positioning for legend
+}
 
-  // Load Google Maps script
-  useEffect(() => {
-    if (window.google && window.google.maps) {
-      setMapLoaded(true)
-      return
-    }
+// Default center coordinates (Rutgers University)
+const defaultCenter = {
+  lat: 40.5008,
+  lng: -74.4474
+}
 
-    const existingScript = document.getElementById("google-maps-script")
-    if (existingScript) {
-      if (!window.google || !window.google.maps) {
-        existingScript.addEventListener("load", () => setMapLoaded(true))
-      } else {
-        setMapLoaded(true)
-      }
-      return
-    }
+export function HousingMap({ housing = [], onSelect }) {
+  // Load the Google Maps script
+  const { isLoaded, loadError } = useLoadScript({
+    googleMapsApiKey: GOOGLE_MAPS_API_KEY,
+  })
 
-    const script = document.createElement("script")
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`
-    script.async = true
-    script.defer = true;
-    script.id = "google-maps-script"
-    script.onload = () => {
-      setMapLoaded(true);
-      console.log("Google Maps script loaded");
-    }
-    script.onerror = () => {
-      console.error("Failed to load Google Maps script");
-      setLoading(false);
-    }
-    document.head.appendChild(script)
-  }, [])
+  // State to hold housing items with geocoded coordinates
+  const [geocodedHousing, setGeocodedHousing] = useState([])
 
-  // Initialize map
-  useEffect(() => {
-    if (!mapLoaded || !mapRef.current || map) return
-
-    try {
-      const newMap = new window.google.maps.Map(mapRef.current, {
-        center: { lat: 40.5008, lng: -74.4474 }, // Rutgers University coordinates
-        zoom: 13,
-        mapTypeControl: false,
-        streetViewControl: false,
-        fullscreenControl: true,
-      })
-      console.log("Map initialized:", newMap);
-      setMap(newMap)
-      setLoading(false)
-
-      // Add a test marker
-      new window.google.maps.Marker({
-        map: newMap,
-        position: { lat: 40.5008, lng: -74.4474 },
-        title: "Test Marker",
-        icon: { url: "https://maps.googleapis.com/mapfiles/ms/icons/red-dot.png" },
-      });
-    } catch (error) {
-      console.error("Error initializing map:", error)
-      setLoading(false);
-    }
-  }, [mapLoaded, map])
-
-  // Add markers when map and housing data are available
-  useEffect(() => {
-  if (!map || !housing || housing.length === 0) return;
-
-  markers.forEach((marker) => marker.setMap(null));
-  setMarkers([]);
-  const infoWindow = new window.google.maps.InfoWindow();
-
-  const geocodeLocation = async (house) => {
-    const geocoder = new window.google.maps.Geocoder();
-    let locationString = house.address || `${house.name}, Rutgers University, Piscataway, NJ 08854`;
-    if (!locationString) {
-      console.warn(`Skipping creation - both address and name are missing`);
-      return null;
-    }
-    try {
-      console.log("Attempting to geocode:", locationString);
-      const response = await geocoder.geocode({ address: locationString });
-      console.log("Geocode response for", locationString, ":", response.results && response.results.length > 0 ? response.results[0].geometry.location : "No results");
-      if (response.results && response.results.length > 0) {
-        return response.results[0].geometry.location;
-      } else {
-        console.error("No results found for:", locationString);
-        return null;
-      }
-    } catch (error) {
-      console.error("Geocoding error for:", locationString, error);
-      return null;
-    }
-  };
-
-  const createMarker = async (house, mapInstance) => {
-    const location = await geocodeLocation(house);
-    console.log("Geocoded location for", house.name, ":", location ? { lat: location.lat(), lng: location.lng() } : null);
-    if (!location) {
-      console.warn("Skipping marker creation because location is null for house:", house);
-      return null;
-    }
-    const marker = new window.google.maps.Marker({
-      map: mapInstance,
-      position: location,
-      title: house.name,
-      icon: {
-        url: house.location_type === "on_campus"
-          ? "https://maps.googleapis.com/mapfiles/ms/icons/red-dot.png"
-          : "https://maps.googleapis.com/mapfiles/ms/icons/blue-dot.png",
-      },
-    });
-    console.log("Marker created:", marker, "for house:", house);
-    marker.addListener("click", () => {
-      const content = `
-        <div style="max-width: 200px; padding: 5px;">
-          <h3 style="margin: 0 0 5px; font-weight: bold;">${house.name}</h3>
-          <p style="margin: 0 0 5px;">${house.location_type === "on_campus" ? "On Campus" : "Off Campus"}</p>
-          <p style="margin: 0 0 5px;">$${house.price.toLocaleString()}</p>
-        </div>
-      `;
-      infoWindow.setContent(content);
-      infoWindow.open(mapInstance, marker);
-      const selectButton = document.createElement("button");
-      selectButton.textContent = "View Details";
-      selectButton.style.marginTop = "5px";
-      selectButton.style.padding = "5px 10px";
-      selectButton.style.backgroundColor = "#f9f9f9";
-      selectButton.style.border = "1px solid #ccc";
-      selectButton.style.borderRadius = "4px";
-      selectButton.style.cursor = "pointer";
-      selectButton.addEventListener("click", () => {
-        onSelect(house);
-        infoWindow.close();
-      });
-      setTimeout(() => {
-        const infoWindowContent = document.querySelector(".gm-style-iw-d");
-        if (infoWindowContent) {
-          const buttonContainer = document.createElement("div");
-          buttonContainer.appendChild(selectButton);
-          infoWindowContent.appendChild(buttonContainer);
+  // Helper function to geocode an address and return a promise with lat/lng
+  const geocodeAddress = (address) => {
+    return new Promise((resolve, reject) => {
+      const geocoder = new window.google.maps.Geocoder()
+      geocoder.geocode({ address }, (results, status) => {
+        if (status === "OK" && results[0]) {
+          const location = results[0].geometry.location
+          resolve({
+            lat: location.lat(),
+            lng: location.lng(),
+          })
+        } else {
+          console.error("Geocode failed: " + status + " for address: " + address)
+          reject(status)
         }
-      }, 10);
-    });
-    return marker;
-  };
+      })
+    })
+  }
 
-  const generateMarkers = async () => {
-    if (!map) {
-      console.warn("Map is not initialized yet. Cannot generate markers.");
-      return;
+  // Get marker icon based on location_type (using default Google Maps icons)
+  const getMarkerIcon = (house) => {
+    if (house.location_type === "on_campus") {
+      return {
+        url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+      }
+    } else if (house.location_type === "off_campus") {
+      return {
+        url: "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+      }
     }
-    const newMarkers = await Promise.all(housing.map(house => createMarker(house, map)));
-    const validMarkers = newMarkers.filter(Boolean);
-    console.log("Number of valid markers:", validMarkers.length);
-    setMarkers(validMarkers);
-    if (validMarkers.length > 0) {
-      const bounds = new window.google.maps.LatLngBounds();
-      validMarkers.forEach((marker) => {
-        bounds.extend(marker.getPosition());
-      });
-      map.fitBounds(bounds);
-      console.log("Map bounds set to:", bounds);
-    } else {
-      console.warn("No valid markers to display.");
+    return null // Default marker if no type specified
+  }
+
+  // Geocode each housing address when housing prop or map load status changes
+  useEffect(() => {
+    if (!isLoaded || housing.length === 0) {
+      setGeocodedHousing([])
+      return
     }
-  };
 
-  generateMarkers();
+    const fetchGeocodes = async () => {
+      const results = await Promise.all(
+        housing.map(async (house) => {
+          // Fallback to name appended with "Rutgers University, NJ" if address is null
+          const queryAddress = house.address || `${house.name} Rutgers University, NJ`
+          try {
+            const coords = await geocodeAddress(queryAddress)
+            return { ...house, lat: coords.lat, lng: coords.lng }
+          } catch (error) {
+            console.error("Error geocoding for:", queryAddress, error)
+            return null
+          }
+        })
+      )
+      setGeocodedHousing(results.filter((item) => item !== null))
+    }
 
-  return () => {
-    markers.forEach(marker => marker.setMap(null));
-    setMarkers([]);
-    infoWindow.close();
-  };
-}, [housing, map, onSelect]);
+    fetchGeocodes()
+  }, [housing, isLoaded])
+
+  if (loadError) return <div>Error loading maps</div>
+  if (!isLoaded) return <div>Loading maps...</div>
+
+  const mapCenter = defaultCenter
 
   return (
-    <Card className="overflow-hidden">
-      {loading && (
-        <div className="flex justify-center items-center h-[500px]">
-          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+    <div className="relative">
+      <GoogleMap
+        mapContainerStyle={mapContainerStyle}
+        zoom={13}
+        center={mapCenter}
+        options={{
+          disableDefaultUI: false,
+          zoomControl: true,
+          streetViewControl: false,
+          mapTypeControl: false,
+          fullscreenControl: true,
+        }}
+      >
+        {geocodedHousing.map((house, index) => (
+          <MarkerF
+            key={house.housing_id || index}
+            position={{ lat: house.lat, lng: house.lng }}
+            onClick={() => onSelect && onSelect(house)}
+            icon={getMarkerIcon(house)}
+          />
+        ))}
+      </GoogleMap>
+      
+      {/* Legend positioned at the bottom of the map */}
+      <div className="absolute bottom-4 left-4 bg-white p-2 rounded shadow-md z-10 flex items-center gap-4 text-sm">
+        <div className="flex items-center">
+          <img 
+            src="http://maps.google.com/mapfiles/ms/icons/blue-dot.png" 
+            alt="On Campus" 
+            className="h-6 w-6 mr-1" 
+          />
+          <span>On Campus</span>
         </div>
-      )}
-      <div ref={mapRef} className="w-full h-[500px]" style={{ display: loading ? "none" : "block" }} />
-      <div className="p-4 flex gap-4 bg-muted/50">
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded-full bg-red-500"></div>
-          <span className="text-sm">On Campus</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded-full bg-blue-500"></div>
-          <span className="text-sm">Off Campus</span>
+        <div className="flex items-center">
+          <img 
+            src="http://maps.google.com/mapfiles/ms/icons/red-dot.png" 
+            alt="Off Campus" 
+            className="h-6 w-6 mr-1" 
+          />
+          <span>Off Campus</span>
         </div>
       </div>
-    </Card>
-  );
+    </div>
+  )
 }
