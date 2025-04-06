@@ -1,4 +1,4 @@
-import { IconTrendingDown, IconTrendingUp } from "@tabler/icons-react";
+import { IconTrendingDown, IconTrendingUp, IconMapPin, IconUsers, IconBuilding } from "@tabler/icons-react";
 
 import { Badge } from "@/components/ui/badge";
 import {
@@ -10,7 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-export function SectionCards({ cards, width }) {
+export function SectionCards({ cards, width, interactive = false }) {
   return (
     <div
       className={
@@ -18,7 +18,11 @@ export function SectionCards({ cards, width }) {
       }
     >
       {cards.map((card) => (
-        <Card key={card.title} className="@container/card">
+        <Card 
+          key={card.title} 
+          className={`@container/card ${interactive && card.onClick ? 'cursor-pointer hover:bg-accent/50 transition-colors' : ''}`}
+          onClick={interactive && card.onClick ? card.onClick : undefined}
+        >
           <CardHeader>
             <CardDescription>{card.title}</CardDescription>
             <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
@@ -29,19 +33,29 @@ export function SectionCards({ cards, width }) {
             {card.title === "Roommate" ? (
               <>
                 <div className="line-clamp-1 flex gap-2 font-medium">
-                  Contact information available
+                  {card.details?.major ? `${card.details.major}` : "Contact information available"}
+                </div>
+                <div className="line-clamp-1 flex gap-2 text-muted-foreground">
+                  {card.details?.classYear ? card.details.classYear : ""}
                 </div>
                 <div className="text-muted-foreground">
-                  Click for more details
+                  {interactive ? "Click for more details" : ""}
                 </div>
               </>
             ) : card.title === "Dorm" ? (
               <>
                 <div className="line-clamp-1 flex gap-2 font-medium">
-                  Housing assignment for Spring 2025
+                  <IconMapPin className="size-4" />
+                  {card.details?.location || "Housing assignment for Spring 2025"}
                 </div>
+                {card.details?.type && (
+                  <div className="line-clamp-1 flex gap-2 text-muted-foreground">
+                    <IconBuilding className="size-4" />
+                    {card.details.type} {card.details.capacity && `· Capacity: ${card.details.capacity}`}
+                  </div>
+                )}
                 <div className="text-muted-foreground">
-                  View building information
+                  {card.details?.term || "View building information"}
                 </div>
               </>
             ) : (

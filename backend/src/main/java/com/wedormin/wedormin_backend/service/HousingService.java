@@ -59,6 +59,15 @@ public class HousingService {
                 .collect(Collectors.toList());
     }
 
+    // Fetch a specific housing by ID
+    public HousingDTO getHousingById(Long id) {
+        Housing housing = housingRepository.findById(id).orElse(null);
+        if (housing != null) {
+            return convertToDTO(housing);
+        }
+        return null;
+    }
+
     // Filter Housing
     public List<HousingDTO> filterAllHousing(
         // Common filters

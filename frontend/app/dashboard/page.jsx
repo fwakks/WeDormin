@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { AppSidebar } from "@/components/app-sidebar"
 import { SectionCards } from "@/components/section-cards"
 import { SiteHeader } from "@/components/site-header"
+import { DetailView } from "@/components/detail-view"
 import {
   SidebarInset,
   SidebarProvider,
@@ -11,19 +12,12 @@ import {
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 
 export default function Page() {
-  const [user, setUser] = useState({ name: null })
+  const [user, setUser] = useState({ name: null, chosen_housing_id: null });
+  const [housingData, setHousingData] = useState(null);
+  const [roommateData, setRoommateData] = useState(null);
+  const [selectedDetail, setSelectedDetail] = useState(null); // 'roommate' or 'housing'
 
-  const cards = [
-    {
-      title: "Roommate",
-      value: "John Smith"
-    },
-    {
-      title: "Dorm",
-      value: "Thomas Suites"
-    }
-  ];
-
+  // Fetch user data
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -37,6 +31,8 @@ export default function Page() {
         const userData = await response.json()
         setUser({ 
           name: userData.name, 
+          ruid: userData.ruid,
+          chosen_housing_id: userData.chosen_housing_id || null
         })
       } catch (error) {
         console.error("Error fetching user data:", error)
@@ -46,6 +42,92 @@ export default function Page() {
     fetchUser()
   }, [])
 
+  // Fetch housing data when chosen_housing_id is available
+  useEffect(() => {
+    const fetchHousingData = async () => {
+      if (!user.chosen_housing_id) return;
+      
+      try {
+        const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || '';
+        const response = await fetch(`${apiBaseUrl}/api/housing/${user.chosen_housing_id}`, {
+          credentials: 'include'
+        });
+        
+        if (!response.ok) {
+          throw new Error("Failed to fetch housing data");
+        }
+        
+        const data = await response.json();
+        setHousingData(data);
+        console.log("Housing data fetched successfully:", data);
+      } catch (error) {
+        console.error("Error fetching housing data:", error);
+      }
+    };
+
+    fetchHousingData();
+  }, [user.chosen_housing_id]);
+
+  // Fetch roommate data
+  useEffect(() => {
+    const fetchRoommateData = async () => {
+      if (!user.ruid) return;
+      
+      try {
+        const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || '';
+        const response = await fetch(`${apiBaseUrl}/api/roommates/student/${user.ruid}`, {
+          credentials: 'include'
+        });
+        
+        if (!response.ok) {
+          throw new Error("Failed to fetch roommate data");
+        }
+        
+        const data = await response.json();
+        setRoommateData(data);
+        console.log("Roommate data fetched successfully:", data);
+      } catch (error) {
+        console.error("Error fetching roommate data:", error);
+      }
+    };
+
+    fetchRoommateData();
+  }, [user.ruid]);
+
+  // Handle card clicks
+  const handleCardClick = (type) => {
+    setSelectedDetail(type);
+  };
+
+  // Close detail views
+  const handleCloseDetail = () => {
+    setSelectedDetail(null);
+  };
+
+  // Prepare cards data based on fetched information
+  const cards = [
+    {
+      title: "Roommate",
+      value: roommateData ? roommateData.name : "No roommate assigned",
+      details: {
+        major: roommateData?.major || "",
+        classYear: roommateData?.classYear || "",
+      },
+      onClick: () => roommateData && handleCardClick('roommate')
+    },
+    {
+      title: "Dorm",
+      value: housingData ? housingData.name : "No housing assigned",
+      details: {
+        location: housingData?.location || "",
+        type: housingData?.housing_type || "",
+        capacity: housingData?.max_residents || "",
+        term: "Spring 2025"
+      },
+      onClick: () => housingData && handleCardClick('housing')
+    }
+  ];
+
   // Function to get initials from name
   const getInitials = (name) => {
     if (!name) return "U";
@@ -54,6 +136,16 @@ export default function Page() {
       .map(part => part[0])
       .join("")
       .toUpperCase();
+  };
+
+  // Determine which data to show in the detail view
+  const getDetailData = () => {
+    if (selectedDetail === 'roommate') {
+      return roommateData;
+    } else if (selectedDetail === 'housing') {
+      return housingData;
+    }
+    return null;
   };
 
   return (
@@ -72,17 +164,29 @@ export default function Page() {
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
               <div className="grid grid-cols-1 place-items-center px-4 lg:px-6">
                 <Avatar className="h-24 w-24 rounded-lg grayscale">
+                  <AvatarImage alt={user.name} />
                   <AvatarFallback className="rounded-lg text-4xl">{getInitials(user.name)}</AvatarFallback>
                 </Avatar>
                 <p className="text-lg">{user.name || "User"}</p>
               </div>
-              <SectionCards cards={cards} width={2}/>
+              <SectionCards cards={cards} width={2} interactive={true} />
+              
               <div className="px-4 lg:px-6">
+                {/* Empty container for additional content */}
               </div>
             </div>
           </div>
         </div>
       </SidebarInset>
+
+      {/* Render DetailView as a modal when needed */}
+      {selectedDetail && getDetailData() && (
+        <DetailView 
+          data={getDetailData()} 
+          type={selectedDetail} 
+          onClose={handleCloseDetail} 
+        />
+      )}
     </SidebarProvider>
   );
 }

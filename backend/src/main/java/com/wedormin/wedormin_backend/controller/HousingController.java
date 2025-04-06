@@ -2,6 +2,7 @@ package com.wedormin.wedormin_backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,6 +38,12 @@ public class HousingController {
     @GetMapping("/offcampus")
     public List<OffCampusHousingDTO> getOffCampusHousing() {
         return housingService.getOffCampusHousing();
+    }
+
+    // Fetch a specific housing by ID
+    @GetMapping("/{id}")
+    public HousingDTO getHousingById(@PathVariable Long id) {
+        return housingService.getHousingById(id);
     }
 
     // Filter housing
