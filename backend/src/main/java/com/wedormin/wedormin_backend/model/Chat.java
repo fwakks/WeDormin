@@ -1,30 +1,55 @@
 package com.wedormin.wedormin_backend.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "chats")
 public class Chat {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "chat_id")
-    private Long chatId;
+    private Long id;
 
     @Column(nullable = false)
     private String name;
 
-    public Chat() {}
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
 
-    public Chat(String name) {
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
+
+    // Getters and Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
         this.name = name;
     }
 
-    public Long getChatId() { return chatId; }
-    public String getName() { return name; }
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
 
-    public void setChatId(Long chatId) { this.chatId = chatId; }
-    public void setName(String name) { this.name = name; }
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 }
-
-
-
