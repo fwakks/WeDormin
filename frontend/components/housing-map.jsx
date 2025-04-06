@@ -9,12 +9,13 @@ const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ""
 const mapContainerStyle = {
   width: "100%",
   height: "500px",
+  position: "relative" // Add relative positioning for legend
 }
 
 // Default center coordinates (Rutgers University)
 const defaultCenter = {
-  lat: 40.5075, 
-  lng: -74.4470,
+  lat: 40.5008,
+  lng: -74.4474
 }
 
 export function HousingMap({ housing = [], onSelect }) {
@@ -38,11 +39,25 @@ export function HousingMap({ housing = [], onSelect }) {
             lng: location.lng(),
           })
         } else {
-          console.error("Geocode failed: " + status)
+          console.error("Geocode failed: " + status + " for address: " + address)
           reject(status)
         }
       })
     })
+  }
+
+  // Get marker icon based on location_type (using default Google Maps icons)
+  const getMarkerIcon = (house) => {
+    if (house.location_type === "on_campus") {
+      return {
+        url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+      }
+    } else if (house.location_type === "off_campus") {
+      return {
+        url: "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+      }
+    }
+    return null // Default marker if no type specified
   }
 
   // Geocode each housing address when housing prop or map load status changes
@@ -55,11 +70,13 @@ export function HousingMap({ housing = [], onSelect }) {
     const fetchGeocodes = async () => {
       const results = await Promise.all(
         housing.map(async (house) => {
+          // Fallback to name appended with "Rutgers University, NJ" if address is null
+          const queryAddress = house.address || `${house.name} Rutgers University, NJ`
           try {
-            const coords = await geocodeAddress(house.address || house.name)
+            const coords = await geocodeAddress(queryAddress)
             return { ...house, lat: coords.lat, lng: coords.lng }
           } catch (error) {
-            // If geocoding fails for a particular address, skip it
+            console.error("Error geocoding for:", queryAddress, error)
             return null
           }
         })
@@ -73,31 +90,51 @@ export function HousingMap({ housing = [], onSelect }) {
   if (loadError) return <div>Error loading maps</div>
   if (!isLoaded) return <div>Loading maps...</div>
 
-  // Set the map center to the first geocoded housing item if available
-  const mapCenter =
-    geocodedHousing.length > 0
-      ? { lat: geocodedHousing[0].lat, lng: geocodedHousing[0].lng }
-      : defaultCenter
+  const mapCenter = defaultCenter
 
   return (
-    <GoogleMap
-      mapContainerStyle={mapContainerStyle}
-      zoom={15}
-      center={mapCenter}
-      options={{
-        disableDefaultUI: false,
-        zoomControl: true,
-        streetViewControl: true,
-        mapTypeControl: true,
-      }}
-    >
-      {geocodedHousing.map((house, index) => (
-        <MarkerF
-          key={house.housing_id || index}
-          position={{ lat: house.lat, lng: house.lng }}
-          onClick={() => onSelect && onSelect(house)}
-        />
-      ))}
-    </GoogleMap>
+    <div className="relative">
+      <GoogleMap
+        mapContainerStyle={mapContainerStyle}
+        zoom={13}
+        center={mapCenter}
+        options={{
+          disableDefaultUI: false,
+          zoomControl: true,
+          streetViewControl: false,
+          mapTypeControl: false,
+          fullscreenControl: true,
+        }}
+      >
+        {geocodedHousing.map((house, index) => (
+          <MarkerF
+            key={house.housing_id || index}
+            position={{ lat: house.lat, lng: house.lng }}
+            onClick={() => onSelect && onSelect(house)}
+            icon={getMarkerIcon(house)}
+          />
+        ))}
+      </GoogleMap>
+      
+      {/* Legend positioned at the bottom of the map */}
+      <div className="absolute bottom-4 left-4 bg-white p-2 rounded shadow-md z-10 flex items-center gap-4 text-sm">
+        <div className="flex items-center">
+          <img 
+            src="http://maps.google.com/mapfiles/ms/icons/blue-dot.png" 
+            alt="On Campus" 
+            className="h-6 w-6 mr-1" 
+          />
+          <span>On Campus</span>
+        </div>
+        <div className="flex items-center">
+          <img 
+            src="http://maps.google.com/mapfiles/ms/icons/red-dot.png" 
+            alt="Off Campus" 
+            className="h-6 w-6 mr-1" 
+          />
+          <span>Off Campus</span>
+        </div>
+      </div>
+    </div>
   )
 }
