@@ -24,6 +24,7 @@ export default function Page() {
     classYear: "all",
     searchTerm: "",
   })
+  const [currentUser, setCurrentUser] = useState(null)
 
   const itemsPerPage = 8
 
@@ -32,26 +33,38 @@ export default function Page() {
       setLoading(true)
       try {
         const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || ""
+        
+        // Fetch roommates
         const roommatesResponse = await fetch(`${apiBaseUrl}/api/students`, {
           credentials: "include",
         })
-
+  
         if (!roommatesResponse.ok) {
           throw new Error("Failed to fetch roommate data")
         }
-
+  
         const roommateData = await roommatesResponse.json()
-
         const allRoommates = [...roommateData]
         setRoommates(allRoommates)
         setFilteredRoommates(allRoommates)
+        
+        // Fetch current user data
+        const userResponse = await fetch(`${apiBaseUrl}/api/user`, {
+          credentials: "include",
+        })
+        
+        if (userResponse.ok) {
+          const userData = await userResponse.json()
+          setCurrentUser(userData)
+          console.log("Current user data fetched successfully:", userData)
+        }
       } catch (error) {
-        console.error("Error fetching roommate data:", error)
+        console.error("Error fetching data:", error)
       } finally {
         setLoading(false)
       }
     }
-
+  
     fetchRoommates()
   }, [])
 
@@ -196,7 +209,13 @@ export default function Page() {
           </div>
         </div>
       </SidebarInset>
-      {selectedRoommates && <RoommateDetail roommate={selectedRoommates} onClose={handleCloseDetail} />}
+      {selectedRoommates && (
+        <RoommateDetail 
+          roommate={selectedRoommates} 
+          onClose={handleCloseDetail} 
+          user={currentUser} 
+        />
+      )}
     </SidebarProvider>
   )
 }

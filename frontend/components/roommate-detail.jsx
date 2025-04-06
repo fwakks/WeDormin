@@ -1,5 +1,12 @@
 "use client"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { useState } from "react"
+import { 
+  Dialog, 
+  DialogContent, 
+  DialogHeader, 
+  DialogTitle,
+  DialogFooter
+} from "@/components/ui/dialog"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import {
@@ -14,14 +21,63 @@ import {
   ThumbsDown,
   MessageCircle,
   Mail,
+  Check,
+  Loader2,
 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 
-export function RoommateDetail({ roommate, onClose }) {
+export function RoommateDetail({ roommate, onClose, user }) {
+  const [isSelecting, setIsSelecting] = useState(false)
+  const [hasSelected, setHasSelected] = useState(false)
+
+  const selectRoommate = async () => {
+    if (!user?.ruid) {
+      console.error("User not logged in or RUID not available")
+      return
+    }
+  
+    console.log("Selecting roommate:", roommate.ruid, "User ID:", user.ruid)
+    setIsSelecting(true)
+    
+    try {
+      const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || ''
+      console.log("Making PATCH request to:", `${apiBaseUrl}/api/students/${user.ruid}`)
+      
+      const response = await fetch(`${apiBaseUrl}/api/students/${user.ruid}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          chosen_student_id: parseInt(roommate.ruid)
+        })
+      })
+  
+      console.log("Response status:", response.status)
+      
+      if (!response.ok) {
+        const errorText = await response.text()
+        console.error("Error response:", errorText)
+        throw new Error(`Failed to select roommate: ${response.status} ${errorText}`)
+      }
+  
+      const data = await response.json()
+      console.log("Successfully selected roommate:", data)
+      setHasSelected(true)
+    } catch (error) {
+      console.error("Error selecting roommate:", error)
+    } finally {
+      if (!hasSelected) {
+        setIsSelecting(false)
+      }
+    }
+  }
+
   return (
-    <Dialog open={true} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[500px] p-0 overflow-hidden">
+    <Dialog open={!!roommate} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="sm:max-w-[500px] max-h-[85vh] overflow-y-auto rounded-lg">
         <div className="relative h-40 w-full bg-gradient-to-r from-primary/20 to-primary/10">
           <Button
             variant="ghost"
@@ -103,7 +159,6 @@ export function RoommateDetail({ roommate, onClose }) {
           <div>
             <h3 className="font-semibold text-base mb-3">Connect</h3>
             <div className="flex space-x-3">
-
               {roommate.instagram_username && (
                 <a
                   href={`https://instagram.com/${roommate.instagram_username.startsWith('@') ? roommate.instagram_username.slice(1) : roommate.instagram_username}`}
@@ -127,11 +182,48 @@ export function RoommateDetail({ roommate, onClose }) {
                   </Button>
                 </a>
               )}
+
+              {roommate.email && (
+                <a
+                  href={`mailto:${roommate.email}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button variant="outline" size="icon">
+                    <Mail className="h-4 w-4 text-blue-400" />
+                  </Button>
+                </a>
+              )}
             </div>
           </div>
         </div>
+
+        <Separator className="my-4" />
+
+        <DialogFooter className="px-6 py-4">
+          <Button variant="outline" onClick={onClose} className="mr-2">
+            Close
+          </Button>
+          <Button
+            onClick={selectRoommate}
+            disabled={isSelecting || hasSelected || !user?.ruid || user?.ruid === roommate.ruid}
+          >
+            {isSelecting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Selecting...
+              </>
+            ) : hasSelected ? (
+              <>
+                <Check className="mr-2 h-4 w-4" />
+                Selected as Roommate
+              </>
+            ) : (
+              "Select as Roommate"
+            )}
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   )
 }
-

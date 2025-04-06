@@ -32,8 +32,10 @@ export default function Page() {
         setUser({ 
           name: userData.name, 
           ruid: userData.ruid,
-          chosen_housing_id: userData.chosen_housing_id || null
+          chosen_housing_id: userData.chosen_housing_id || null, 
+          chosen_student_id: userData.chosen_student_id || null
         })
+        console.log("User data fetched successfully:", userData)
       } catch (error) {
         console.error("Error fetching user data:", error)
       }
@@ -75,7 +77,7 @@ export default function Page() {
       
       try {
         const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || '';
-        const response = await fetch(`${apiBaseUrl}/api/roommates/student/${user.ruid}`, {
+        const response = await fetch(`${apiBaseUrl}/api/students/${user.chosen_student_id}`, {
           credentials: 'include'
         });
         
@@ -184,7 +186,8 @@ export default function Page() {
         <DetailView 
           data={getDetailData()} 
           type={selectedDetail} 
-          onClose={handleCloseDetail} 
+          onClose={handleCloseDetail}
+          user={user} 
         />
       )}
     </SidebarProvider>
