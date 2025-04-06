@@ -77,27 +77,19 @@ export function RoommateDetail({ roommate, onClose, user }) {
 
   return (
     <Dialog open={!!roommate} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-[500px] max-h-[85vh] overflow-y-auto rounded-lg">
-        <div className="relative h-40 w-full bg-gradient-to-r from-primary/20 to-primary/10">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="absolute right-4 top-4 bg-background/80 hover:bg-background/90 z-10"
-            onClick={onClose}
-          >
-            <X className="h-4 w-4" />
-          </Button>
-
-          <div className="absolute -bottom-16 left-6">
-            <Avatar className="h-32 w-32 border-4 border-background">
-              <AvatarImage src={roommate.picture} alt={roommate.name} />
-              <AvatarFallback className="text-3xl">{roommate.name?.charAt(0)}</AvatarFallback>
-            </Avatar>
+      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <div className="flex justify-between items-start">
+            <DialogTitle className="text-2xl font-bold">{roommate.name}</DialogTitle>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8"
+              onClick={onClose}
+            >
+              <X className="h-4 w-4" />
+            </Button>
           </div>
-        </div>
-
-        <DialogHeader className="pt-20 px-6">
-          <DialogTitle className="text-2xl font-bold">{roommate.name}</DialogTitle>
           <div className="flex flex-wrap gap-2 mt-2">
             <Badge variant="outline" className="flex items-center gap-1">
               <Cake className="h-3.5 w-3.5 text-pink-500" />
@@ -127,7 +119,14 @@ export function RoommateDetail({ roommate, onClose, user }) {
           </div>
         </DialogHeader>
 
-        <div className="px-6 py-4 space-y-6">
+        <div className="relative h-64 w-full my-4 rounded-md overflow-hidden">
+          <Avatar className="h-full w-full">
+            <AvatarImage src={roommate.picture} alt={roommate.name} className="object-cover" />
+            <AvatarFallback className="text-5xl">{roommate.name?.charAt(0)}</AvatarFallback>
+          </Avatar>
+        </div>
+
+        <div className="space-y-6">
           <div>
             <h3 className="font-semibold flex items-center text-base mb-2">
               <MessageCircle className="h-4 w-4 mr-2 text-primary" />
@@ -138,20 +137,22 @@ export function RoommateDetail({ roommate, onClose, user }) {
 
           <Separator />
 
-          <div>
-            <h3 className="font-semibold flex items-center text-base mb-2">
-              <Heart className="h-4 w-4 mr-2 text-red-500" />
-              Likes
-            </h3>
-            <p className="text-sm text-muted-foreground">{roommate.likes}</p>
-          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h3 className="font-semibold flex items-center text-base mb-2">
+                <Heart className="h-4 w-4 mr-2 text-red-500" />
+                Likes
+              </h3>
+              <p className="text-sm text-muted-foreground">{roommate.likes}</p>
+            </div>
 
-          <div>
-            <h3 className="font-semibold flex items-center text-base mb-2">
-              <ThumbsDown className="h-4 w-4 mr-2 text-orange-500" />
-              Dislikes
-            </h3>
-            <p className="text-sm text-muted-foreground">{roommate.dislikes}</p>
+            <div>
+              <h3 className="font-semibold flex items-center text-base mb-2">
+                <ThumbsDown className="h-4 w-4 mr-2 text-orange-500" />
+                Dislikes
+              </h3>
+              <p className="text-sm text-muted-foreground">{roommate.dislikes}</p>
+            </div>
           </div>
 
           <Separator />
@@ -200,7 +201,7 @@ export function RoommateDetail({ roommate, onClose, user }) {
 
         <Separator className="my-4" />
 
-        <DialogFooter className="px-6 py-4">
+        <DialogFooter>
           <Button variant="outline" onClick={onClose} className="mr-2">
             Close
           </Button>

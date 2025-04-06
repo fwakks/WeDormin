@@ -124,7 +124,7 @@ export default function Page() {
         location: housingData?.location || "",
         type: housingData?.housing_type || "",
         capacity: housingData?.max_residents || "",
-        term: "Spring 2025"
+        term: "Click for more details"
       },
       onClick: () => housingData && handleCardClick('housing')
     }

@@ -51,7 +51,7 @@ export function DetailView({ data, type, onClose }) {
     return {
       name: data.name || "Unknown",
       major: data.major || "Not specified",
-      year: data.classYear || "Not specified",
+      class_year: data.class_year || "Not specified",
       email: data.email || null,
       instagram: data.instagram_username || null,
       linkedin: data.linkedin_link || null,
@@ -99,9 +99,6 @@ export function DetailView({ data, type, onClose }) {
               <CardTitle className="text-2xl">{details.name}</CardTitle>
               <CardDescription>{type === "roommate" ? "Roommate Details" : "Housing Details"}</CardDescription>
             </div>
-            <Button variant="ghost" size="sm" onClick={onClose}>
-              Close
-            </Button>
           </CardHeader>
           <Separator />
           <CardContent className="pt-6">
@@ -150,10 +147,10 @@ export function DetailView({ data, type, onClose }) {
                       </p>
                     </div>
                     <div>
-                      <h3 className="text-sm font-medium text-muted-foreground">Year</h3>
+                      <h3 className="text-sm font-medium text-muted-foreground">Class Year</h3>
                       <p className="mt-1 flex items-center gap-2">
                         <IconCalendar className="h-4 w-4" />
-                        {details.year}
+                        {details.class_year}
                       </p>
                     </div>
                     {details.age && (
