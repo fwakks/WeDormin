@@ -118,7 +118,11 @@ export function AppSidebar({ ...props }) {
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
               <a href="/dashboard">
-                <IconInnerShadowTop className="!size-5" />
+              <img 
+                src="/wedormin.png" 
+                alt="WeDormin Logo" 
+                className="size-6 object-contain" 
+              />
                 <span className="text-base font-semibold">WeDormin?</span>
               </a>
             </SidebarMenuButton>

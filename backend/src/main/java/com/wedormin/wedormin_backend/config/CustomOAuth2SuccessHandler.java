@@ -31,8 +31,8 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                        Authentication authentication) throws IOException, ServletException {
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-        String email = oAuth2User.getAttribute("email");
-        String name = oAuth2User.getAttribute("name");
+        // String email = oAuth2User.getAttribute("email");
+        // String name = oAuth2User.getAttribute("name");
         String oauthId = oAuth2User.getAttribute("sub"); // Google's unique identifier
         
         Optional<Student> existingStudent = studentRepository.findByOauthId(oauthId);
