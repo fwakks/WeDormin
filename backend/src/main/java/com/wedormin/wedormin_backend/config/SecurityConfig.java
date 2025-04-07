@@ -45,7 +45,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/")
+                        .logoutSuccessUrl( frontendUrl + "/")
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
                 )
