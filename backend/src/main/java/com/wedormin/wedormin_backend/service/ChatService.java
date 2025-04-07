@@ -9,6 +9,7 @@ import com.wedormin.wedormin_backend.repository.ChatMessageRepository;
 import com.wedormin.wedormin_backend.repository.ChatParticipantRepository;
 import com.wedormin.wedormin_backend.model.Chat;
 import com.wedormin.wedormin_backend.repository.ChatRepository;
+import com.wedormin.wedormin_backend.controller.ChatController;
 
 import java.util.List;
 import java.time.LocalDateTime;
@@ -26,6 +27,9 @@ public class ChatService {
     @Autowired
     private ChatRepository chatRepository;
 
+    @Autowired
+    private ChatController chatController; // Inject ChatController to notify clients
+
     public List<ChatMessage> getMessages(Long chatId) {
         return chatMessageRepository.findByChatId(chatId);
     }
@@ -33,7 +37,12 @@ public class ChatService {
     public ChatMessage sendMessage(Long chatId, ChatMessage message) {
         message.setChatId(chatId);
         message.setTimestamp(LocalDateTime.now()); // Ensure timestamp is set
-        return chatMessageRepository.save(message);
+        ChatMessage savedMessage = chatMessageRepository.save(message);
+
+        // Notify clients about the new message
+        chatController.sendMessageToClients(savedMessage);
+
+        return savedMessage;
     }
 
     public List<Long> getParticipants(Long chatId) {

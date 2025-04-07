@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { useState, useEffect } from "react"
+import * as React from "react";
+import { useState, useEffect } from "react";
 import {
   IconHelp,
   IconHome,
@@ -11,12 +11,12 @@ import {
   IconSettings,
   IconUser,
   IconUsers,
-} from "@tabler/icons-react"
+} from "@tabler/icons-react";
 
-import { NavDocuments } from "@/components/nav-documents"
-import { NavMain } from "@/components/nav-main"
-import { NavSecondary } from "@/components/nav-secondary"
-import { NavUser } from "@/components/nav-user"
+import { NavDocuments } from "@/components/nav-documents";
+import { NavMain } from "@/components/nav-main";
+import { NavSecondary } from "@/components/nav-secondary";
+import { NavUser } from "@/components/nav-user";
 import {
   Sidebar,
   SidebarContent,
@@ -25,18 +25,16 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 
-export function AppSidebar({
-  ...props
-}) {
+export function AppSidebar({ ...props }) {
   // State to store user data
   const [user, setUser] = useState({
     name: "",
     email: "",
     image: "/avatars/default.jpg", // Default avatar
   });
-  
+
   // State for loading status
   const [isLoading, setIsLoading] = useState(true);
 
@@ -44,28 +42,28 @@ export function AppSidebar({
     const fetchUser = async () => {
       try {
         setIsLoading(true);
-        const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || '';
+        const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
         const response = await fetch(`${apiBaseUrl}/api/user`, {
-          credentials: 'include'
-        })
+          credentials: "include",
+        });
         if (!response.ok) {
-          throw new Error("Failed to fetch user data")
+          throw new Error("Failed to fetch user data");
         }
-        const userData = await response.json()
-        setUser({ 
-          name: userData.name || "User", 
+        const userData = await response.json();
+        setUser({
+          name: userData.name || "User",
           email: userData.email || "",
-          image: userData.image || "/avatars/default.jpg"
-        })
+          image: userData.image || "/avatars/default.jpg",
+        });
       } catch (error) {
-        console.error("Error fetching user data:", error)
-      } finally { 
-        setIsLoading(false)
+        console.error("Error fetching user data:", error);
+      } finally {
+        setIsLoading(false);
       }
-    }
-  
-    fetchUser()
-  }, [])
+    };
+
+    fetchUser();
+  }, []);
 
   const data = {
     user: user,
@@ -87,7 +85,7 @@ export function AppSidebar({
       },
       {
         title: "Chat",
-        url: "#",
+        url: "/chat",
         icon: IconMessageCircle,
       },
       {
@@ -115,7 +113,10 @@ export function AppSidebar({
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:!p-1.5">
+            <SidebarMenuButton
+              asChild
+              className="data-[slot=sidebar-menu-button]:!p-1.5"
+            >
               <a href="/dashboard">
                 <IconInnerShadowTop className="!size-5" />
                 <span className="text-base font-semibold">WeDormin?</span>
