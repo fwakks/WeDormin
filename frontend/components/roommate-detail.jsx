@@ -121,8 +121,8 @@ export function RoommateDetail({ roommate, onClose, user }) {
         </DialogHeader>
 
         <div className="relative h-64 w-full my-4 rounded-md overflow-hidden">
-          <Avatar className="h-full w-full">
-            <AvatarImage src={roommate.picture} alt={roommate.name} className="object-cover" />
+          <Avatar className="h-60 w-48 rounded-lg mx-auto">
+            <AvatarImage src={roommate.image} alt={roommate.name} className="object-cover" />
             <AvatarFallback className="text-5xl">{roommate.name?.charAt(0)}</AvatarFallback>
           </Avatar>
         </div>

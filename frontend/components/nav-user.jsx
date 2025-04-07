@@ -30,6 +30,7 @@ import { useRouter } from "next/navigation"
 export function NavUser({
   user
 }) {
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || ""
   const { isMobile } = useSidebar()
   const router = useRouter()
 
@@ -90,7 +91,7 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => router.push("/logout")}>
+            <DropdownMenuItem onClick={() => router.push(`${apiBaseUrl}/logout`)}>
               <IconLogout />
               Log out
             </DropdownMenuItem>
