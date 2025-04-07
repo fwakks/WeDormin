@@ -11,6 +11,7 @@ import { Loader2 } from "lucide-react"
 
 function AiCard() {
   const [chosen, setChosen] = useState([])
+  const [userData, setUserData] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
 
@@ -25,9 +26,10 @@ function AiCard() {
       if (!response.ok) {
         throw new Error("Failed to fetch user data")
       }
-      const userData = await response.json()
+      const userDataResponse = await response.json()
+      setUserData(userDataResponse)
 
-      const generation = await fetch(`${apiBaseUrl}/api/students/${userData.ruid}/similar/3`, {
+      const generation = await fetch(`${apiBaseUrl}/api/students/${userDataResponse.ruid}/similar/3`, {
         credentials: "include",
       })
 
@@ -68,13 +70,13 @@ function AiCard() {
           >
             <CardFooter className="flex flex-row gap-1.5 text-sm pb-4">
               <div className="flex-grow">
-                {chosen[0] ? <FaceCard size={32} student={chosen[0]} /> : <FaceCard size={32} />}
+                {chosen[0] ? <FaceCard size={32} student={chosen[0]} user={userData} /> : <FaceCard size={32} user={userData} />}
               </div>
               <div className="flex-grow">
-                {chosen[1] ? <FaceCard size={32} student={chosen[1]} /> : <FaceCard size={32} />}
+                {chosen[1] ? <FaceCard size={32} student={chosen[1]} user={userData} /> : <FaceCard size={32} user={userData} />}
               </div>
               <div className="flex-grow">
-                {chosen[2] ? <FaceCard size={32} student={chosen[2]} /> : <FaceCard size={32} />}
+                {chosen[2] ? <FaceCard size={32} student={chosen[2]} user={userData} /> : <FaceCard size={32} user={userData} />}
               </div>
             </CardFooter>
           </motion.div>
@@ -85,4 +87,3 @@ function AiCard() {
 }
 
 export default AiCard
-
