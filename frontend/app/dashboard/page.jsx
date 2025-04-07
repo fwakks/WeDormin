@@ -12,7 +12,7 @@ import {
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 
 export default function Page() {
-  const [user, setUser] = useState({ name: null, chosen_housing_id: null });
+  const [user, setUser] = useState({ name: null, chosen_housing_id: null, image:null });
   const [housingData, setHousingData] = useState(null);
   const [roommateData, setRoommateData] = useState(null);
   const [selectedDetail, setSelectedDetail] = useState(null); // 'roommate' or 'housing'
@@ -33,7 +33,8 @@ export default function Page() {
           name: userData.name, 
           ruid: userData.ruid,
           chosen_housing_id: userData.chosen_housing_id || null, 
-          chosen_student_id: userData.chosen_student_id || null
+          chosen_student_id: userData.chosen_student_id || null,
+          image: userData.image
         })
         console.log("User data fetched successfully:", userData)
       } catch (error) {
@@ -165,8 +166,8 @@ export default function Page() {
           <div className="@container/main flex flex-1 flex-col gap-2">
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
               <div className="grid grid-cols-1 place-items-center px-4 lg:px-6">
-                <Avatar className="h-24 w-24 rounded-lg grayscale">
-                  <AvatarImage alt={user.name} />
+                <Avatar className="h-24 w-24 rounded-lg">
+                <AvatarImage src={user.image} alt={user.name} />
                   <AvatarFallback className="rounded-lg text-4xl">{getInitials(user.name)}</AvatarFallback>
                 </Avatar>
                 <p className="text-lg">{user.name || "User"}</p>
