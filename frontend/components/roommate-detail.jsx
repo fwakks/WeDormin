@@ -23,6 +23,7 @@ import {
   Mail,
   Check,
   Loader2,
+  BookOpen
 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
@@ -103,10 +104,10 @@ export function RoommateDetail({ roommate, onClose, user }) {
               </Badge>
             )}
 
-            {roommate.classYear && (
+            {roommate.class_year && (
               <Badge variant="outline" className="flex items-center gap-1">
-                <GraduationCap className="h-3.5 w-3.5 text-blue-500" />
-                {roommate.classYear}
+                <BookOpen className="h-3.5 w-3.5 text-green-500" />
+                {roommate.class_year}
               </Badge>
             )}
 

@@ -1,4 +1,4 @@
-import { IconTrendingDown, IconTrendingUp, IconMapPin, IconUsers, IconBuilding } from "@tabler/icons-react";
+import { IconTrendingDown, IconTrendingUp, IconMapPin, IconUsers, IconBuilding, IconSchool, IconCalendar } from "@tabler/icons-react";
 
 import { Badge } from "@/components/ui/badge";
 import {
@@ -14,62 +14,87 @@ export function SectionCards({ cards, width, interactive = false }) {
   return (
     <div
       className={
-        "*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2"
+        "grid grid-cols-1 gap-6 px-4 lg:px-6 @xl/main:grid-cols-2"
       }
     >
       {cards.map((card) => (
         <Card 
           key={card.title} 
-          className={`@container/card ${interactive && card.onClick ? 'cursor-pointer hover:bg-accent/50 transition-colors' : ''}`}
+          data-slot="card"
+          className={`@container/card overflow-hidden relative bg-gradient-to-t from-primary/5 to-card dark:bg-card shadow-md hover:shadow-lg transition-all ${
+            interactive && card.onClick 
+              ? 'cursor-pointer hover:border-primary/30 hover:scale-[1.01] hover:bg-accent/30 group' 
+              : ''
+          }`}
           onClick={interactive && card.onClick ? card.onClick : undefined}
         >
-          <CardHeader>
-            <CardDescription>{card.title}</CardDescription>
-            <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
+          {interactive && card.onClick && (
+            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-gradient-to-r from-transparent via-transparent to-primary/10 transition-opacity duration-300" />
+          )}
+          
+          <CardHeader className="pb-0">
+            <CardDescription className="text-sm font-medium text-muted-foreground flex items-center gap-1.5">
+              {card.title === "Roommate" ? (
+                <IconUsers className="size-4 text-primary/70" />
+              ) : card.title === "Dorm" ? (
+                <IconBuilding className="size-4 text-primary/70" />
+              ) : (
+                <IconTrendingUp className="size-4 text-primary/70" />
+              )}
+              {card.title}
+            </CardDescription>
+            <CardTitle className="text-2xl font-semibold tracking-tight tabular-nums @[250px]/card:text-3xl">
               {card.value}
             </CardTitle>
           </CardHeader>
-          <CardFooter className="flex-col items-start gap-1.5 text-sm">
+
+          <CardFooter className="flex-col items-start gap-1 pt-1 pb-4 text-sm border-t border-border/40">
             {card.title === "Roommate" ? (
               <>
-                <div className="line-clamp-1 flex gap-2 font-medium">
-                  {card.details?.major ? `${card.details.major}` : "Contact information available"}
+                <div className="line-clamp-1 flex gap-2 font-medium items-center">
+                  <IconSchool className="size-4 text-blue-500/70" />
+                  {card.details?.major ? `${card.details.major}` : "Major..."}
                 </div>
-                <div className="line-clamp-1 flex gap-2 text-muted-foreground">
-                  {card.details?.classYear ? card.details.classYear : ""}
-                </div>
-                <div className="text-muted-foreground">
-                  {interactive ? "Click for more details" : ""}
-                </div>
+                {interactive && (
+                  <Badge variant="outline" className="mt-1 group-hover:bg-primary/10 transition-colors">
+                    View details
+                  </Badge>
+                )}
               </>
             ) : card.title === "Dorm" ? (
               <>
-                <div className="line-clamp-1 flex gap-2 font-medium">
-                  <IconMapPin className="size-4" />
+                <div className="line-clamp-1 flex gap-2 font-medium items-center">
+                  <IconMapPin className="size-4 text-red-500/70" />
                   {card.details?.location || "Housing assignment for Spring 2025"}
                 </div>
-                {card.details?.type && (
-                  <div className="line-clamp-1 flex gap-2 text-muted-foreground">
-                    <IconBuilding className="size-4" />
-                    {card.details.type} {card.details.capacity && `· Capacity: ${card.details.capacity}`}
-                  </div>
+                {interactive && (
+                  <Badge variant="outline" className="mt-1 group-hover:bg-primary/10 transition-colors">
+                    {"View details"}
+                  </Badge>
                 )}
-                <div className="text-muted-foreground">
-                  {card.details?.term || "View building information"}
-                </div>
               </>
             ) : (
               // Default footer
               <>
-                <div className="line-clamp-1 flex gap-2 font-medium">
-                  Trending up this month <IconTrendingUp className="size-4" />
+                <div className="line-clamp-1 flex gap-2 font-medium items-center">
+                  <IconTrendingUp className="size-4 text-emerald-500" />
+                  Trending up this month
                 </div>
-                <div className="text-muted-foreground">
+                <div className="text-muted-foreground flex items-center gap-1">
+                  <IconUsers className="size-3.5 opacity-70" />
                   Visitors for the last 6 months
                 </div>
               </>
             )}
           </CardFooter>
+          
+          {interactive && card.onClick && (
+            <div className="absolute bottom-0 right-0 w-8 h-8 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-primary/70">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="m9 18 6-6-6-6"/>
+              </svg>
+            </div>
+          )}
         </Card>
       ))}
     </div>

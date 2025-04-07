@@ -110,7 +110,7 @@ export default function Page() {
   const cards = [
     {
       title: "Roommate",
-      value: roommateData ? roommateData.name : "No roommate assigned",
+      value: roommateData ? roommateData.name : "No roommate chosen",
       details: {
         major: roommateData?.major || "",
         classYear: roommateData?.classYear || "",
@@ -119,7 +119,7 @@ export default function Page() {
     },
     {
       title: "Dorm",
-      value: housingData ? housingData.name : "No housing assigned",
+      value: housingData ? housingData.name : "No housing chosen",
       details: {
         location: housingData?.location || "",
         type: housingData?.housing_type || "",

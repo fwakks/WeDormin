@@ -6,12 +6,12 @@ import {
   IconMail,
   IconSchool,
   IconMapPin,
-  IconBuilding,
   IconCoin,
   IconHome,
   IconUser,
   IconUsers,
   IconCalendar,
+  IconCake
 } from "@tabler/icons-react"
 import { 
   Dialog, 
@@ -117,21 +117,21 @@ export function DetailView({ data, type, onClose }) {
                         rel="noopener noreferrer"
                       >
                         <Button variant="outline" size="icon" aria-label="Instagram">
-                          <IconBrandInstagram className="h-4 w-4" />
+                          <IconBrandInstagram className="h-4 w-4 text-pink-600" />
                         </Button>
                       </Link>
                     )}
                     {details.linkedin && (
                       <Link href={details.linkedin} target="_blank" rel="noopener noreferrer">
                         <Button variant="outline" size="icon" aria-label="LinkedIn">
-                          <IconBrandLinkedin className="h-4 w-4" />
+                          <IconBrandLinkedin className="h-4 w-4 text-blue-600" />
                         </Button>
                       </Link>
                     )}
                     {details.email && (
                       <Link href={`mailto:${details.email}`}>
                         <Button variant="outline" size="icon" aria-label="Email">
-                          <IconMail className="h-4 w-4" />
+                          <IconMail className="h-4 w-4 text-blue-400" />
                         </Button>
                       </Link>
                     )}
@@ -142,14 +142,14 @@ export function DetailView({ data, type, onClose }) {
                     <div>
                       <h3 className="text-sm font-medium text-muted-foreground">Major</h3>
                       <p className="flex items-center gap-2 mt-1">
-                        <IconSchool className="h-4 w-4" />
+                        <IconSchool className="h-4 w-4 text-blue-500" />
                         {details.major}
                       </p>
                     </div>
                     <div>
                       <h3 className="text-sm font-medium text-muted-foreground">Class Year</h3>
                       <p className="mt-1 flex items-center gap-2">
-                        <IconCalendar className="h-4 w-4" />
+                        <IconCalendar className="h-4 w-4 text-green-500" />
                         {details.class_year}
                       </p>
                     </div>
@@ -157,7 +157,7 @@ export function DetailView({ data, type, onClose }) {
                       <div>
                         <h3 className="text-sm font-medium text-muted-foreground">Age</h3>
                         <p className="flex items-center gap-2 mt-1">
-                          <IconUser className="h-4 w-4" />
+                          <IconCake className="h-4 w-4 text-pink-500" />
                           {details.age} years old
                         </p>
                       </div>
@@ -166,7 +166,7 @@ export function DetailView({ data, type, onClose }) {
                       <div>
                         <h3 className="text-sm font-medium text-muted-foreground">Gender</h3>
                         <p className="flex items-center gap-2 mt-1">
-                          <IconUser className="h-4 w-4" />
+                          <IconUser className="h-4 w-4 text-purple-500" />
                           {details.gender}
                         </p>
                       </div>
@@ -213,10 +213,10 @@ export function DetailView({ data, type, onClose }) {
                     </p>
                   </div>
                   <div>
-                    <h3 className="text-sm font-medium text-muted-foreground">Type</h3>
+                    <h3 className="text-sm font-medium text-muted-foreground">Number of Residents</h3>
                     <p className="flex items-center gap-2 mt-1">
-                      <IconBuilding className="h-4 w-4" />
-                      {details.type}
+                      <IconUsers className="h-4 w-4" />
+                      {details.numResidents}
                     </p>
                   </div>
                   <div>
@@ -288,3 +288,6 @@ export function DetailView({ data, type, onClose }) {
     </Dialog>
   )
 }
+
+// TODO update section cards ui
+// TODO logout
