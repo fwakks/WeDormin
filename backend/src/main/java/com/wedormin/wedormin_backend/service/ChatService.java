@@ -10,6 +10,7 @@ import com.wedormin.wedormin_backend.repository.ChatParticipantRepository;
 import com.wedormin.wedormin_backend.model.Chat;
 import com.wedormin.wedormin_backend.repository.ChatRepository;
 import com.wedormin.wedormin_backend.controller.ChatController;
+import org.springframework.context.annotation.Lazy;
 
 import java.util.List;
 import java.time.LocalDateTime;
@@ -27,7 +28,9 @@ public class ChatService {
     @Autowired
     private ChatRepository chatRepository;
 
+    
     @Autowired
+    @Lazy
     private ChatController chatController; // Inject ChatController to notify clients
 
     public List<ChatMessage> getMessages(Long chatId) {
